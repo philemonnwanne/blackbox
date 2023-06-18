@@ -30,8 +30,8 @@ To run the VacationVibe app locally, follow these steps:
    - Frontend: Navigate to the `client` folder and run `npm install`
 4. Create a `.env` file in the `api` folder and provide the necessary environment variables. You can refer to the `.env.example` file for the required variables.
 5. Start the development servers:
-   - Backend: In the `api` folder, run `npm run dev`
-   - Frontend: In the `client` folder, run `npm run start`
+   - Backend: In the `api` folder, run `npm start dev`
+   - Frontend: In the `client` folder, run `npm run dev`
 
 Now, you can access the VacationVibe app by opening your browser and visiting `http://localhost:4000`.
 
