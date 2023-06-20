@@ -1,16 +1,16 @@
-image:
-  file: .gitpod.dockerfile
+# image:
+#   file: .gitpod.dockerfile
 
-tasks:
-  - name: client
-    command: |
-      cd client
-      npm install
+# tasks:
+#   - name: client
+#     command: |
+#       cd client
+#       npm install
 
-  - name: api
-    command: |
-      cd api
-      npm install
+#   - name: api
+#     command: |
+#       cd api
+#       npm install
 
   # - name: mongodb
   #   command: |
