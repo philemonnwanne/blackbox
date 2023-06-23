@@ -1,0 +1,15 @@
+**/.git
+**/.gitignore
+**/.vscode
+**/coverage
+**/.env
+**/.aws
+**/.ssh
+README.md
+**/.DS_Store
+**/venv
+**/env
+.dockerignore
+dockerfile
+makefile
+node_modules

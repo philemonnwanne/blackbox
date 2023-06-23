@@ -1,0 +1,15 @@
+FROM node:20.3.0-bullseye-slim@sha256:009c7e8556b05d81da6b9cf90d560f9634c9e647f421bc210a4e7239fea883c3
+
+# ENV PORT=4000
+
+WORKDIR /backend
+
+COPY . .
+
+RUN npm install
+
+# EXPOSE ${PORT}
+
+USER node
+
+CMD ["npm", "start", "dev"]

@@ -1,0 +1,21 @@
+{
+    "Version": "2012-10-17",
+    "Id": "s3AllowUploadDownload",
+    "Statement": [
+        {
+            "Sid": "Stmt1687089501600",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::<AWS_ACCOUNT_ID>:user/IAM_USER"
+            },
+            "Action": [
+                "s3:ListBucket",
+                "s3:ListBucketVersions",
+                "s3:GetBucketLocation",
+                "s3:Get*",
+                "s3:Put*"
+            ],
+            "Resource": "S3_BUCKET_ARN"
+        }
+    ]
+}

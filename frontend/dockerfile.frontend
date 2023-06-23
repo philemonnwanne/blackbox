@@ -1,0 +1,29 @@
+# ========= ========
+    #Build Image
+# ========= ========
+FROM node:16.20.0-alpine3.18 AS build
+
+WORKDIR /frontend
+
+# COPY package*.json ./
+COPY . .
+
+RUN npm install \
+    # create build artifacts from stage 0
+    && npm run build 
+# EXPOSE 5173
+# CMD ["npm", "run", "dev"]
+# ========= ========
+    #Prod Image
+# ========= ========
+
+FROM nginx:stable-alpine-slim
+
+EXPOSE 5173
+
+# copy the updated virtual server configuration to replace the default Nginx configuration
+# COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /frontend/nginx.conf /etc/nginx/nginx.conf
+
+# copy only the production-related application code from the image built by the previous stage
+COPY --from=build /frontend/dist /usr/share/nginx/html

@@ -1,0 +1,30 @@
+# =========
+# Build Image
+# =========
+FROM node:20.3.0-bullseye-slim@sha256:f5a8815aabc95fb8d991d8f1d7161aeeb409d22c9b8767eaf55bb910383dbbce AS build
+
+WORKDIR /frontend
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+# create build artifacts from stage 0
+RUN npm run build
+
+# =========
+# Production Image
+# =========
+# pull the official Nginx image from Docker Hub
+FROM nginx
+
+# expose the application on port 3000
+EXPOSE 3000
+
+# copy the updated virtual server configuration to replace the default Nginx configuration
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# copy only the production-related application code from the image built by the previous stage
+COPY --from=build /frontend/build /usr/share/nginx/html
