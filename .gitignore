@@ -113,4 +113,5 @@ jspm_packages/
 # ignore files in the build directory
 build
 
-
+# infracost
+.infracost

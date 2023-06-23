@@ -81,7 +81,7 @@ module "route53" {
       }
     },
     {
-      name = "terraform-test"
+      name = "vacation-vibe"
       type    = "CNAME"
       ttl = 300
       records = [

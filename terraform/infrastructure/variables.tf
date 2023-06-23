@@ -4,12 +4,6 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "instance_name" {
-  description = "name prefix to assign to webserver instances"
-  type        = string
-  default     = "webserver-"
-}
-
 variable "domain_name" {
   description = "domain name to attach "
   type        = string
