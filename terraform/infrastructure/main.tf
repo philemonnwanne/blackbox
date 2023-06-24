@@ -56,16 +56,16 @@ module "security" {
 # }
 
 # import the alb module
-module "alb" {
-  source = "./modules/alb"
+# module "alb" {
+#   source = "./modules/alb"
 
-  vpc_id          = module.vpc.vacation-vibe_vpc_id
-  subnets         = module.vpc.vacation-vibe_vpc_subnet_id[*]
-  security_groups = [module.security.alb_security_group_id]
-  target_01       = module.ec2.*.webserver_id[0]
-  target_02       = module.ec2.*.webserver_id[1]
-  target_03       = module.ec2.*.webserver_id[2]
-}
+#   vpc_id          = module.vpc.vacation-vibe_vpc_id
+#   subnets         = module.vpc.vacation-vibe_vpc_subnet_id[*]
+#   security_groups = [module.security.alb_security_group_id]
+#   target_01       = module.ec2.*.webserver_id[0]
+#   target_02       = module.ec2.*.webserver_id[1]
+#   target_03       = module.ec2.*.webserver_id[2]
+# }
 
 # import the route53 module
 module "route53" {
