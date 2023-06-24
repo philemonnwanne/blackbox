@@ -1,7 +1,7 @@
 variable "alb_name" {
   description = "application load balancer name"
   type        = string
-  default     = "webserver-alb"
+  default     = "backend-alb"
 }
 
 variable "vpc_id" {
@@ -20,7 +20,7 @@ variable "security_groups" {
 }
 
 variable "target_groups_name" {
-  description = "name prefix to assign to webserver instances"
+  description = "name prefix to assign to backend containers"
   type        = string
   default     = "frontend-tg"
 }

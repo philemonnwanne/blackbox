@@ -1,16 +1,16 @@
-variable "webserver_security_group_name" {
-  description = "webserver security group name"
+variable "backend_security_group_name" {
+  description = "backend security group name"
   type        = string
-  default     = "webserver-security-group"
+  default     = "backend-security-group"
 }
 
-variable "webserver_security_group_ingress_cidr" {
+variable "backend_security_group_ingress_cidr" {
   description = "security group inbound CIDR block"
   type        = list(string)
   default     = ["0.0.0.0/0"]
 }
 
-variable "webserver_security_group_ingress_rules" {
+variable "backend_security_group_ingress_rules" {
   description = "security group inbound rules"
   type        = list(string)
   default     = [

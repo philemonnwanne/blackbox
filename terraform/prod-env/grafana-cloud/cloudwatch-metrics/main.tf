@@ -2,13 +2,10 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.0"
+      version = "~> 4.49.0"
     }
   }
-}
-
-locals {
-  grafana_account_id = "008923505280"
+  required_version = ">= 1.1.0"
 }
 
 variable "external_id" {
@@ -80,4 +77,8 @@ resource "aws_iam_role" "grafana_labs_cloudwatch_integration" {
 output "role_arn" {
   value       = aws_iam_role.grafana_labs_cloudwatch_integration.arn
   description = "The ARN for the role created, copy this into Grafana Cloud installation."
+}
+
+locals {
+  grafana_account_id = "008923505280"
 }

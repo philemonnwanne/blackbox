@@ -15,19 +15,10 @@ provider "aws" {
   region = local.region
 }
 
-# define common tags to be assigned to all VPC resources
-locals {
-  region = var.aws_region
-
-  tags = {
-    Owner = "Capstone Group02"
-    Track = "Cloud/DevOps"
-  }
-}
-
 # import the vpc module
 module "vpc" {
-  source = "./modules/vpc"
+  # source = "./modules/vpc"
+  source = "../../modules/vpc"
 
   vpc_name = "vacation-vibe-vpc"
   tags     = local.tags
@@ -100,3 +91,16 @@ module "route53" {
 #     command = "${var.ansible_cmd} ${var.ansible_switch} ${var.inventory_path} ${var.playbook_path} ${var.ssh_common_args} "
 #   }
 # }
+
+locals {
+  region = var.aws_region
+  http_port    = 80
+  any_port     = 0
+  any_protocol = "-1"
+  tcp_protocol = "tcp"
+  all_ips      = ["0.0.0.0/0"]
+  tags = {
+    Owner = "Capstone Group02"
+    Track = "Cloud/DevOps"
+  }
+}

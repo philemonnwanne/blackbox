@@ -1,0 +1,56 @@
+{
+    "family": "backend",
+    "executionRoleArn": "arn:aws:iam::183066416469:role/vacation-vibeServiceExecutionRole",
+    "taskRoleArn": "arn:aws:iam::183066416469:role/vacation-vibeTaskRole",
+    "networkMode": "awsvpc",
+    "cpu": "256",
+    "memory": "512",
+    "requiresCompatibilities": [ 
+      "FARGATE" 
+    ],
+    "containerDefinitions": [
+      {
+        "name": "backend",
+        "image": "183066416469.dkr.ecr.us-east-1.amazonaws.com/backend",
+        "essential": true,
+        "healthCheck": {
+          "command": [
+            "CMD-SHELL",
+            "npm --version || exit 1"
+          ],
+          "interval": 30,
+          "timeout": 5,
+          "retries": 3,
+          "startPeriod": 60
+        },
+        "portMappings": [
+          {
+            "name": "backend",
+            "containerPort": 4000,
+            "protocol": "tcp", 
+            "appProtocol": "http"
+          }
+        ],
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+              "awslogs-group": "vacation-vibe-fargate-cluster",
+              "awslogs-region": "us-east-1",
+              "awslogs-stream-prefix": "backend"
+          }
+        },
+        "environment": [
+          {"name": "S3_BUCKET_NAME", "value": "vacation-vibe"},
+          {"name": "FRONTEND_URL", "value": "*"},
+          {"name": "BACKEND_URL", "value": "*"},
+          {"name": "AWS_REGION", "value": "us-east-1"}
+        ],
+        "secrets": [
+          {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/AWS_ACCESS_KEY_ID"},
+          {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY"},
+          {"name": "MONGO_URL"       , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/MONGO_URL" },
+          {"name": "JWT_TOKEN" , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/JWT_TOKEN" }
+        ]
+      }
+    ]
+  }

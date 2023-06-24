@@ -62,7 +62,7 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
   restrict_public_buckets = true
 }
 
-# connect to a DynamoDB table to use for locking
+# create a DynamoDB table to use for locking
 resource "aws_dynamodb_table" "terraform_locks" {
   name         = "vacation-vibe-state-lock"
   billing_mode = "PAY_PER_REQUEST"
