@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 variable "bucket_name" {
-  default = "myapp.com-sample"
+  default = "vacation-vibe.me"
 }
 
 resource "aws_s3_bucket_policy" "bucket_policy" {

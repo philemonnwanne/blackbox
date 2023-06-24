@@ -25,4 +25,5 @@ By pinning the container version to a specific `SHA` you’re trading off “avo
 ### Things that I need to do
 
 - add infracost cost badge [infracost](https://www.infracost.io/docs/infracost_cloud/readme_badge/)
-- 
+- add infracost github actions CI/CD [infracost-ci/cd](https://github.com/infracost/actions/)
+- add env vars to github secrets for infracost workflow setup
