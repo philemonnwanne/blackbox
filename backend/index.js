@@ -15,7 +15,7 @@ const Booking = require("./models/Booking");
 require("dotenv").config();
 
 const bcryptSalt = bcrypt.genSaltSync(10);
-const jwtSecret = "WU6Ex4KaMD1rT85GVXxqLTq5G&UK8mPqYwUe$RMm";
+const jwtSecret = process.env.JWT_TOKEN;
 const bucket = process.env.S3_BUCKET_NAME;
 
 const app = express();
