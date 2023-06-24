@@ -21,3 +21,8 @@ You can pin your job to run with a specific image SHA-256, which will guarantee 
 ### TradeOffs
 
 By pinning the container version to a specific `SHA` you’re trading off “avoiding potential build failures” for “getting potential security patches for free”.
+
+### Things that I need to do
+
+- add infracost cost badge [infracost](https://www.infracost.io/docs/infracost_cloud/readme_badge/)
+- 
