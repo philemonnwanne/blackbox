@@ -4,7 +4,7 @@ this block configures a (VPC) module, which provisions networking resources such
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "3.19.0"
+  version = "5.0.0"
 
   name = "${var.vpc_name}"
   cidr = var.cidr

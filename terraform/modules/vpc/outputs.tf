@@ -1,24 +1,29 @@
-output "mini_vpc_id" {
+output "vpc_id" {
     description = "project VPC ID"
     value = module.vpc.vpc_id
 }
 
-output "mini_vpc_name" {
+output "vpc_name" {
     description = "project VPC name"
     value = module.vpc.name
 }
 
-output "mini_vpc_subnet_id" {
-    description = "project VPC subnet ID"
+output "vpc_public_subnet_id" {
+    description = "project VPC public subnets"
     value = module.vpc.public_subnets
 }
 
-output "mini_vpc_security_group_id" {
+output "vpc_private_subnet_id" {
+    description = "project VPC private subnet"
+    value = module.vpc.private_subnets
+}
+
+output "vpc_security_group_id" {
     description = "project VPC default security group ID"
     value = module.vpc.default_security_group_id
 }
 
 output "azs" {
-    description = "AZ to start the instance in"
+    description = "a list of availability zones"
     value = module.vpc.azs
 }

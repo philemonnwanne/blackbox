@@ -20,8 +20,9 @@ resource "aws_s3_bucket" "vacationvibe-state" {
   object_lock_enabled = true
   # Prevent accidental deletion of this S3 bucket
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false
   }
+  force_destroy = true
   tags = local.tags
 }
 
