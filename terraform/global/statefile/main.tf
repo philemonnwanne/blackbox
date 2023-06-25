@@ -15,28 +15,19 @@ provider "aws" {
   region = local.region
 }
 
-# define common tags to be assigned to all VPC resources
-locals {
-  region = var.aws_region
-
-  tags = {
-    Owner = "Capstone Group02"
-    Track = "Cloud/DevOps"
-  }
-}
-
-resource "aws_s3_bucket" "terraform_state" {
-  bucket = "vacation-vibe-state"
- 
+resource "aws_s3_bucket" "vacationvibe-state" {
+  bucket = "vacationvibe-state-${local.environment}"
+  object_lock_enabled = true
   # Prevent accidental deletion of this S3 bucket
   lifecycle {
     prevent_destroy = true
   }
+  tags = local.tags
 }
 
 # every update to a file in the bucket creates a new version of that file, a useful fallback mechanism if something goes wrong
 resource "aws_s3_bucket_versioning" "enabled" {
-  bucket = aws_s3_bucket.terraform_state.id
+  bucket = aws_s3_bucket.vacationvibe-state.id
   versioning_configuration {
     status = "Enabled"
   }
@@ -44,7 +35,7 @@ resource "aws_s3_bucket_versioning" "enabled" {
 
 # ensures that your state files, and any secrets they might contain, are always encrypted on disk when stored in S3
 resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
-  bucket = aws_s3_bucket.terraform_state.id
+  bucket = aws_s3_bucket.vacationvibe-state.id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -55,21 +46,20 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
 
 # block all public access to the S3 bucket + extra layer of protection to ensure no one on your team can ever accidentally make this S3 bucket public
 resource "aws_s3_bucket_public_access_block" "public_access" {
-  bucket                  = aws_s3_bucket.terraform_state.id
+  bucket                  = aws_s3_bucket.vacationvibe-state.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
 
-# create a DynamoDB table to use for locking
-resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "vacation-vibe-state-lock"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
+locals {
+  region = "us-east-1"
+  environment = "dev"
 
-  attribute {
-    name = "LockID"
-    type = "S"
+  tags = {
+    Owner = "Capstone-Group02"
+    Track = "Cloud/DevOps"
+    Environment = "Prod"
   }
 }
