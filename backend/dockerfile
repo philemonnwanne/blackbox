@@ -1,4 +1,4 @@
-FROM 183066416469.dkr.ecr.us-east-1.amazonaws.com/cruddur-python
+FROM 183066416469.dkr.ecr.us-east-1.amazonaws.com/vacation-vibe-nodejs:3.11.3-alpine
 
 WORKDIR /backend
 
