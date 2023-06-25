@@ -86,45 +86,45 @@ aws ecs create-cluster \
 aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
 ```
 
-### Build the base python image
+### Build the base nodejs image
 
-Create ECR repo for the python image
+Create ECR repo for the nodejs image
 
 ```sh
 aws ecr create-repository \
-  --repository-name vacation-vibe-python \
+  --repository-name vacation-vibe-nodejs \
   --image-tag-mutability MUTABLE
 ```
 
 Set URL
 
 ```sh
-export ECR_PYTHON_URL="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/vacation-vibe-python"
+export ECR_NODEJS_URL="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/vacation-vibe-nodejs"
 
-echo $ECR_PYTHON_URL
+echo $ECR_NODEJS_URL
 ```
 
 #### Pull Image
 
 ```sh
-docker pull python:3.11.3-alpine
+docker pull node:16.20.0-alpine3.18@sha256:f711d8a40d3515d7d44e344306382179fc8bfc4fe75f1a77b27a686a88649430
 ```
 
 #### Tag Image
 
 ```sh
-docker tag python:3.11.3-alpine $ECR_PYTHON_URL:3.11.3-alpine
+docker tag node:16.20.0-alpine3.18@sha256:f711d8a40d3515d7d44e344306382179fc8bfc4fe75f1a77b27a686a88649430 $ECR_NODEJS_URL:3.11.3-alpine
 ```
 
 #### Push Image
 
 ```sh
-docker push $ECR_PYTHON_URL:3.11.3-alpine
+docker push $ECR_NODEJS_URL:3.11.3-alpine
 ```
 
 ### Build the backend image
 
-`Note:` In your flask dockerfile update the `FROM` command, so instead of using DockerHub's python image
+`Note:` In your flask dockerfile update the `FROM` command, so instead of using DockerHub's nodejs image
 you use your own eg.
 
 > remember to put the :latest tag on the end
@@ -140,8 +140,8 @@ aws ecr create-repository \
 Set URL
 
 ```sh
-export ECR_BACKEND_FLASK_URL="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/backend-flask"
-echo $ECR_BACKEND_FLASK_URL
+export ECR_BACKEND_URL="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/backend-flask"
+echo $ECR_BACKEND_URL
 ```
 
 Build Image
@@ -153,13 +153,13 @@ docker build -t backend-flask .
 Tag Image
 
 ```sh
-docker tag backend-flask:latest $ECR_BACKEND_FLASK_URL
+docker tag backend-flask:latest $ECR_BACKEND_URL
 ```
 
 Push Image
 
 ```sh
-docker push $ECR_BACKEND_FLASK_URL
+docker push $ECR_BACKEND_URL
 ```
 
 ### Build the frontend image
@@ -368,7 +368,7 @@ Create a new folder called `aws/task-definitions` and place the following file i
   "containerDefinitions": [
     {
       "name": "backend-flask",
-      "image": "BACKEND_FLASK_IMAGE_URL",
+      "image": "BACKEND_IMAGE_URL",
       "cpu": 256,
       "memory": 512,
       "essential": true,
@@ -722,7 +722,7 @@ echo $vacation-vibe_ALB_DNS
 Create the `backend-flask` target group
 
 ```sh
-export vacation-vibe_BACKEND_FLASK_TARGETS=$(
+export vacation-vibe_BACKEND_TARGETS=$(
 aws elbv2 create-target-group \
 --name vacation-vibe-backend-flask-tg \
 --protocol HTTP \
@@ -735,7 +735,7 @@ aws elbv2 create-target-group \
 --healthy-threshold-count 3 \
 --query "TargetGroups[*].TargetGroupArn" \
 --output text)
-echo $vacation-vibe_BACKEND_FLASK_TARGETS
+echo $vacation-vibe_BACKEND_TARGETS
 ```
 
 Create listener for the `backend-flask` target group
@@ -743,7 +743,7 @@ Create listener for the `backend-flask` target group
 ```sh
 aws elbv2 create-listener --load-balancer-arn $vacation-vibe_ALB_ARN \
 --protocol HTTP --port 4567  \
---default-actions Type=forward,TargetGroupArn=$vacation-vibe_BACKEND_FLASK_TARGETS \
+--default-actions Type=forward,TargetGroupArn=$vacation-vibe_BACKEND_TARGETS \
 --output text \
 --color on
 ```
@@ -763,7 +763,7 @@ Create a new folder called `aws/task-definitions` and place the following file i
   "containerDefinitions": [
     {
       "name": "backend-flask",
-      "image": "BACKEND_FLASK_IMAGE_URL",
+      "image": "BACKEND_IMAGE_URL",
       "cpu": 256,
       "memory": 512,
       "essential": true,
@@ -824,7 +824,7 @@ aws ecs create-service --cli-input-json file://aws/services/service-backend-flas
 Regsiter Targets for the `backend-flask` target group
 
 ```sh
-aws elbv2 register-targets --target-group-arn $vacation-vibe_BACKEND_FLASK_TARGETS  \
+aws elbv2 register-targets --target-group-arn $vacation-vibe_BACKEND_TARGETS  \
 --targets Id=192.98.76.90 Id=10.0.6.1 \
 --output text \
 --color on
