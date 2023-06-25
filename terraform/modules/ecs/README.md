@@ -133,27 +133,27 @@ Create ECR Repo for the backend
 
 ```sh
 aws ecr create-repository \
-  --repository-name backend-flask \
+  --repository-name backend \
   --image-tag-mutability MUTABLE
 ```
 
 Set URL
 
 ```sh
-export ECR_BACKEND_URL="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/backend-flask"
+export ECR_BACKEND_URL="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/backend"
 echo $ECR_BACKEND_URL
 ```
 
 Build Image
 
 ```sh
-docker build -t backend-flask .
+docker build -t backend .
 ```
 
 Tag Image
 
 ```sh
-docker tag backend-flask:latest $ECR_BACKEND_URL
+docker tag backend:latest $ECR_BACKEND_URL
 ```
 
 Push Image
@@ -228,11 +228,11 @@ Make sure the following are set as environment variables before running the foll
 [secrets-envvar-ssm-paramstore](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/secrets-envvar-ssm-paramstore.html)
 
 ```sh
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend-flask/AWS_ACCESS_KEY_ID" --value $AWS_ACCESS_KEY_ID
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend-flask/AWS_SECRET_ACCESS_KEY" --value $AWS_SECRET_ACCESS_KEY
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend-flask/CONNECTION_URL" --value $PROD_CONNECTION_URL
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend-flask/ROLLBAR_ACCESS_TOKEN" --value $ROLLBAR_ACCESS_TOKEN
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend-flask/OTEL_EXPORTER_OTLP_HEADERS" --value $OTEL_EXPORTER_OTLP_HEADERS
+aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/AWS_ACCESS_KEY_ID" --value $AWS_ACCESS_KEY_ID
+aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY" --value $AWS_SECRET_ACCESS_KEY
+aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/CONNECTION_URL" --value $PROD_CONNECTION_URL
+aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/ROLLBAR_ACCESS_TOKEN" --value $ROLLBAR_ACCESS_TOKEN
+aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/OTEL_EXPORTER_OTLP_HEADERS" --value $OTEL_EXPORTER_OTLP_HEADERS
 ```
 
 ### Create Task and Exection Roles for Task Defintion
@@ -286,7 +286,7 @@ Now create another json file `/policies/service-execution-policy.json` and add t
         "ssm:GetParameter", 
         "ssm:GetParameters"
     ],
-      "Resource": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend-flask/*"
+      "Resource": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/*"
     }
   ]
 }
@@ -357,24 +357,24 @@ aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AWSXRayDaemonWri
 
 Create a new folder called `aws/task-definitions` and place the following file in there:
 
-`backend-flask.json`
+`backend.json`
 
 ```json
 {
-  "family": "backend-flask",
+  "family": "backend",
   "executionRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeServiceExecutionRole",
   "taskRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeTaskRole",
   "networkMode": "awsvpc",
   "containerDefinitions": [
     {
-      "name": "backend-flask",
+      "name": "backend",
       "image": "BACKEND_IMAGE_URL",
       "cpu": 256,
       "memory": 512,
       "essential": true,
       "portMappings": [
         {
-          "name": "backend-flask",
+          "name": "backend",
           "containerPort": 4567,
           "protocol": "tcp", 
           "appProtocol": "http"
@@ -385,11 +385,11 @@ Create a new folder called `aws/task-definitions` and place the following file i
         "options": {
             "awslogs-group": "vacation-vibe",
             "awslogs-region": "us-east-1",
-            "awslogs-stream-prefix": "backend-flask"
+            "awslogs-stream-prefix": "backend"
         }
       },
       "environment": [
-        {"name": "OTEL_SERVICE_NAME", "value": "backend-flask"},
+        {"name": "OTEL_SERVICE_NAME", "value": "backend"},
         {"name": "OTEL_EXPORTER_OTLP_ENDPOINT", "value": "https://api.honeycomb.io"},
         {"name": "AWS_COGNITO_USER_POOL_ID", "value": ""},
         {"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": ""},
@@ -398,11 +398,11 @@ Create a new folder called `aws/task-definitions` and place the following file i
         {"name": "AWS_DEFAULT_REGION", "value": ""}
       ],
       "secrets": [
-        {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend-flask/AWS_ACCESS_KEY_ID"},
-        {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend-flask/AWS_SECRET_ACCESS_KEY"},
-        {"name": "CONNECTION_URL"       , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend-flask/CONNECTION_URL" },
-        {"name": "ROLLBAR_ACCESS_TOKEN" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend-flask/ROLLBAR_ACCESS_TOKEN" },
-        {"name": "OTEL_EXPORTER_OTLP_HEADERS" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend-flask/OTEL_EXPORTER_OTLP_HEADERS" }
+        {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/AWS_ACCESS_KEY_ID"},
+        {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY"},
+        {"name": "CONNECTION_URL"       , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/CONNECTION_URL" },
+        {"name": "ROLLBAR_ACCESS_TOKEN" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/ROLLBAR_ACCESS_TOKEN" },
+        {"name": "OTEL_EXPORTER_OTLP_HEADERS" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/OTEL_EXPORTER_OTLP_HEADERS" }
         
       ]
     }
@@ -415,7 +415,7 @@ Create a new folder called `aws/task-definitions` and place the following file i
 Register the task definition for the backend
 
 ```sh
-aws ecs register-task-definition --cli-input-json file://aws/task-definitions/backend-flask.json
+aws ecs register-task-definition --cli-input-json file://aws/task-definitions/backend.json
 ```
 
 ### Create Security Group
@@ -528,7 +528,7 @@ session-manager-plugin
 While in the `project` directory
 
 ```sh
-aws ecs create-service --cli-input-json file://aws/services/service-backend-flask.json
+aws ecs create-service --cli-input-json file://aws/services/service-backend.json
 ```
 
 <!-- ```sh
@@ -542,7 +542,7 @@ aws ecs execute-command  \
 --region $AWS_DEFAULT_REGION \
 --cluster vacation-vibe \
 --task dceb2ebdc11c49caadd64e6521c6b0c7 \
---container backend-flask \
+--container backend \
 --command "/bin/sh" \
 --interactive
 ```
@@ -557,13 +557,13 @@ In the backend directory, create a new script `bin/ecs/connect-to-ecs` so we can
 set -e # stop if it fails at any point
 
 if [ -z "$1" ]; then
-  echo "No TASK_ID argument was supplied eg .bin/ecs/connect-to-ecs b0f2a4f926b545b9b99992b0eefc5860 backend-flask"
+  echo "No TASK_ID argument was supplied eg .bin/ecs/connect-to-ecs b0f2a4f926b545b9b99992b0eefc5860 backend"
   exit 1
 fi
 TASK_ID=$1
 
 if [ -z "$2" ]; then
-  echo "No CONTAINER_NAME argument was supplied eg .bin/ecs/connect-to-ecs b0f2a4f926b545b9b99992b0eefc5860 backend-flask"
+  echo "No CONTAINER_NAME argument was supplied eg .bin/ecs/connect-to-ecs b0f2a4f926b545b9b99992b0eefc5860 backend"
   exit 1
 fi
 CONTAINER_NAME=$2
@@ -596,7 +596,7 @@ docker run -rm \
 -e CONNECTION_URL="postgresql://postgres:password@db:5432/vacation-vibe" \
 -e FRONTEND_URL="https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}" \
 -e BACKEND_URL="https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}" \
--e OTEL_SERVICE_NAME='backend-flask' \
+-e OTEL_SERVICE_NAME='backend' \
 -e OTEL_EXPORTER_OTLP_ENDPOINT="https://api.honeycomb.io" \
 -e OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=${HONEYCOMB_API_KEY}" \
 -e AWS_XRAY_URL="*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*" \
@@ -607,7 +607,7 @@ docker run -rm \
 -e ROLLBAR_ACCESS_TOKEN="${ROLLBAR_ACCESS_TOKEN}" \
 -e AWS_COGNITO_USER_POOL_ID="${AWS_COGNITO_USER_POOL_ID}" \
 -e AWS_COGNITO_USER_POOL_CLIENT_ID="5b6ro31g97urk767adrbrdj1g5" \   
--it backend-flask-prod
+-it backend-prod
 ``` -->
 
 # Connecting via a load balancer
@@ -719,12 +719,12 @@ echo "~~~~~~~~~"
 echo $vacation-vibe_ALB_DNS
 ```
 
-Create the `backend-flask` target group
+Create the `backend` target group
 
 ```sh
 export vacation-vibe_BACKEND_TARGETS=$(
 aws elbv2 create-target-group \
---name vacation-vibe-backend-flask-tg \
+--name vacation-vibe-backend-tg \
 --protocol HTTP \
 --port 4567 \
 --vpc-id $vacation-vibe_VPC_ID \
@@ -738,7 +738,7 @@ aws elbv2 create-target-group \
 echo $vacation-vibe_BACKEND_TARGETS
 ```
 
-Create listener for the `backend-flask` target group
+Create listener for the `backend` target group
 
 ```sh
 aws elbv2 create-listener --load-balancer-arn $vacation-vibe_ALB_ARN \
@@ -752,24 +752,24 @@ aws elbv2 create-listener --load-balancer-arn $vacation-vibe_ALB_ARN \
 
 Create a new folder called `aws/task-definitions` and place the following file in there:
 
-`backend-flask.json`
+`backend.json`
 
 ```json
 {
-  "family": "backend-flask",
+  "family": "backend",
   "executionRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeServiceExecutionRole",
   "taskRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeTaskRole",
   "networkMode": "awsvpc",
   "containerDefinitions": [
     {
-      "name": "backend-flask",
+      "name": "backend",
       "image": "BACKEND_IMAGE_URL",
       "cpu": 256,
       "memory": 512,
       "essential": true,
       "portMappings": [
         {
-          "name": "backend-flask",
+          "name": "backend",
           "containerPort": 4567,
           "protocol": "tcp", 
           "appProtocol": "http"
@@ -780,11 +780,11 @@ Create a new folder called `aws/task-definitions` and place the following file i
         "options": {
             "awslogs-group": "vacation-vibe",
             "awslogs-region": "us-east-1",
-            "awslogs-stream-prefix": "backend-flask"
+            "awslogs-stream-prefix": "backend"
         }
       },
       "environment": [
-        {"name": "OTEL_SERVICE_NAME", "value": "backend-flask"},
+        {"name": "OTEL_SERVICE_NAME", "value": "backend"},
         {"name": "OTEL_EXPORTER_OTLP_ENDPOINT", "value": "https://api.honeycomb.io"},
         {"name": "AWS_COGNITO_USER_POOL_ID", "value": ""},
         {"name": "AWS_COGNITO_USER_POOL_CLIENT_ID", "value": ""},
@@ -793,11 +793,11 @@ Create a new folder called `aws/task-definitions` and place the following file i
         {"name": "AWS_DEFAULT_REGION", "value": ""}
       ],
       "secrets": [
-        {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend-flask/AWS_ACCESS_KEY_ID"},
-        {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend-flask/AWS_SECRET_ACCESS_KEY"},
-        {"name": "CONNECTION_URL"       , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend-flask/CONNECTION_URL" },
-        {"name": "ROLLBAR_ACCESS_TOKEN" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend-flask/ROLLBAR_ACCESS_TOKEN" },
-        {"name": "OTEL_EXPORTER_OTLP_HEADERS" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend-flask/OTEL_EXPORTER_OTLP_HEADERS" }
+        {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/AWS_ACCESS_KEY_ID"},
+        {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY"},
+        {"name": "CONNECTION_URL"       , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/CONNECTION_URL" },
+        {"name": "ROLLBAR_ACCESS_TOKEN" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/ROLLBAR_ACCESS_TOKEN" },
+        {"name": "OTEL_EXPORTER_OTLP_HEADERS" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/OTEL_EXPORTER_OTLP_HEADERS" }
         
       ]
     }
@@ -810,7 +810,7 @@ Create a new folder called `aws/task-definitions` and place the following file i
 Register the task definition for the backend
 
 ```sh
-aws ecs register-task-definition --cli-input-json file://aws/task-definitions/backend-flask.json
+aws ecs register-task-definition --cli-input-json file://aws/task-definitions/backend.json
 ```
 
 ### Create the backend service
@@ -818,10 +818,10 @@ aws ecs register-task-definition --cli-input-json file://aws/task-definitions/ba
 While in the `project` directory
 
 ```sh
-aws ecs create-service --cli-input-json file://aws/services/service-backend-flask.json
+aws ecs create-service --cli-input-json file://aws/services/service-backend.json
 ```
 
-Regsiter Targets for the `backend-flask` target group
+Regsiter Targets for the `backend` target group
 
 ```sh
 aws elbv2 register-targets --target-group-arn $vacation-vibe_BACKEND_TARGETS  \
