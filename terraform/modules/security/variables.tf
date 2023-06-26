@@ -14,9 +14,10 @@ variable "backend_security_group_ingress_rules" {
   description = "security group inbound rules"
   type        = list(string)
   default     = [
-    "http-80-tcp",
-    "https-443-tcp",
-    "ssh-tcp"
+    # "http-80-tcp",
+    # "https-443-tcp",
+    # "ssh-tcp",
+    "4000-tcp"
     ]
 }
 
