@@ -40,7 +40,7 @@
           }
         },
         "environment": [
-          {"name": "S3_BUCKET_NAME", "value": "vacation-vibe-dev-bucket"},
+          {"name": "S3_BUCKET_NAME", "value": "vacation-vibe"},
           {"name": "FRONTEND_URL", "value": "*"},
           {"name": "BACKEND_URL", "value": "*"},
           {"name": "AWS_REGION", "value": "us-east-1"}
@@ -48,7 +48,6 @@
         "secrets": [
           {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/AWS_ACCESS_KEY_ID"},
           {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY"},
-          {"name": "MONGO_URL"       , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/MONGO_URL" },
           {"name": "JWT_TOKEN" , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/JWT_TOKEN" }
         ]
       }

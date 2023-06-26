@@ -12,7 +12,8 @@ module "ecs" {
   source = "../../modules/ecs"
 
   source_security_group_id = module.security.alb_security_group_id
-  subnet_ids = module.vpc.vpc_private_subnet_id
+  # subnet_ids = module.vpc.vpc_private_subnet_id
+  subnet_ids = module.vpc.vpc_public_subnet_id
   # tags = local.tags
 }
 

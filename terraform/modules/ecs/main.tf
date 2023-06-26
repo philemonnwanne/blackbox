@@ -7,23 +7,23 @@ module "ecs_cluster" {
   source = "terraform-aws-modules/ecs/aws//modules/cluster"
   version = "5.2.0"
 
-  cluster_name = local.name
+  cluster_name = "vacation-vibe"
 
-  # Capacity provider
-  fargate_capacity_providers = {
-    FARGATE = {
-      default_capacity_provider_strategy = {
-        weight = 50
-        base   = 20
-      }
-    }
-  }
+#   # Capacity provider
+#   fargate_capacity_providers = {
+#     FARGATE = {
+#       default_capacity_provider_strategy = {
+#         weight = 50
+#         base   = 20
+#       }
+#     }
+#   }
   tags = local.tags
 }
 
 # namespace mapping
 resource "aws_service_discovery_http_namespace" "this" {
-  name        = local.name
+  name        = "vacation-vibe"
   description = "CloudMap namespace for ${local.name}"
   tags        = local.tags
 }
@@ -38,14 +38,23 @@ module "ecs_service" {
 
   cpu    = 256
   memory = 512
+  enable_execute_command = true
 
   # Container definition(s)
   container_definitions = {
     (local.name) = {
-      cpu       = 256
-      memory    = 512
       essential = true
-      image     = "public.ecr.aws/aws-containers/ecsdemo-frontend:776fd50"
+      image     = "183066416469.dkr.ecr.us-east-1.amazonaws.com/backend"
+      health_check = {
+        command = [
+          "CMD-SHELL",
+          "npm --version || exit 1"
+        ],
+        interval = 30,
+        timeout = 5,
+        retries = 3,
+        start_period = 60
+      },
       port_mappings = [
         {
           name          = local.name
@@ -59,13 +68,12 @@ module "ecs_service" {
       log_configuration = {
         logDriver = "awslogs"
         options = {
-          Name                    = "backend"
-          region                  = local.region
-          delivery_stream         = "/ecs"
-          log-driver-buffer-limit = "2097152"
+            awslogs-group = "ecs/vacation-vibe/backend"
+            awslogs-region = local.region
+            awslogs-stream-prefix = "backend"
         }
       }
-      memory_reservation = 100
+      # memory_reservation = 100
     }
   }
 
@@ -89,6 +97,8 @@ module "ecs_service" {
 #     }
 #   }
 
+  assign_public_ip = true
+
   subnet_ids = var.subnet_ids
 
   security_group_rules = {
@@ -97,7 +107,7 @@ module "ecs_service" {
       from_port                = local.container_port
       to_port                  = local.container_port
       protocol                 = "tcp"
-      description              = "service port"
+      description              = "vacation-vibe backend service port"
       source_security_group_id = var.source_security_group_id
     }
     egress_all = {
