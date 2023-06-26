@@ -1,4 +1,8 @@
-variable "source_security_group_id" {
+# variable "source_security_group_id" {
+#   description = "network configuration for the service"
+# }
+
+variable "security_groups" {
   description = "network configuration for the service"
 }
 

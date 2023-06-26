@@ -28,6 +28,64 @@ resource "aws_service_discovery_http_namespace" "this" {
   tags        = local.tags
 }
 
+# ------------------------- Step 0
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "service_role" {
+  name               = "Vacation-VibeServiceExecutionRole"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+# resource "aws_iam_role" "task_role" {
+#   name               = "Vacation-VibeTaskRole"
+#   assume_role_policy = data.aws_iam_policy_document.assume_role.json
+# }
+# ------------------------- Step 1
+# create policy document
+data "aws_iam_policy_document" "service_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:GetAuthorizationToken",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = ["*"]
+    }
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameter",
+      "ssm:GetParameters"
+    ]
+    resources = ["arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/*"]
+  }
+}
+# --------------------- Step 2
+# link policy documnet to `aws_iam_policy` resource
+resource "aws_iam_policy" "service_policy" {
+   name        = "ecs-service-execution-policy"
+   description = ""
+   policy      = data.aws_iam_policy_document.service_policy.json
+}
+
+# ----------------------- Step 3
+# attaches the `aws_iam_policy` resource policy to the role in sstep 0
+resource "aws_iam_role_policy_attachment" "task_role_policy_attachment" {
+  role       = aws_iam_role.service_role.name
+  policy_arn = aws_iam_policy.service_policy.arn
+}
+
 # create a service
 module "ecs_service" {
   source = "terraform-aws-modules/ecs/aws//modules/service"
@@ -39,11 +97,20 @@ module "ecs_service" {
   cpu    = 256
   memory = 512
   enable_execute_command = true
+  # execution_role_arn = "arn:aws:iam::183066416469:role/Vacation-VibeServiceExecutionRole"
+  # task_role_arn = "arn:aws:iam::183066416469:role/CruddurTaskRole"
 
   # Container definition(s)
   container_definitions = {
+    # task_role_arn = "arn:aws:iam::183066416469:role/CruddurTaskRole"
+    # execution_role_arn = "arn:aws:iam::183066416469:role/CruddurServiceExecutionRole"
     (local.name) = {
       essential = true
+
+      cluster_settings = {
+        name = "containerInsights",
+        value = "enabled"
+      }
       image     = "183066416469.dkr.ecr.us-east-1.amazonaws.com/backend"
       health_check = {
         command = [
@@ -54,7 +121,7 @@ module "ecs_service" {
         timeout = 5,
         retries = 3,
         start_period = 60
-      },
+      }
       port_mappings = [
         {
           name          = local.name
@@ -74,6 +141,38 @@ module "ecs_service" {
         }
       }
       # memory_reservation = 100
+      environment = [
+        {
+          name  = "S3_BUCKET_NAME", 
+          value = "vacation-vibe"
+        },
+        {
+          name  = "FRONTEND_URL",
+          value = "*"
+        },
+        {
+          name  = "BACKEND_URL",
+          value = "*"
+        },
+        {
+          name  = "AWS_REGION",
+          value = "us-east-1"
+        }
+      ]
+      secrets = [
+        {
+          name = "AWS_ACCESS_KEY_ID",
+          valueFrom = "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/AWS_ACCESS_KEY_ID"
+        },
+        {
+          name = "AWS_SECRET_ACCESS_KEY",
+          valueFrom = "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY"
+        },
+        {
+          name = "JWT_TOKEN",
+          valueFrom = "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/JWT_TOKEN" 
+        }
+      ]
     }
   }
 
