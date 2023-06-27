@@ -219,9 +219,9 @@ Make sure the following are set as environment variables before running the foll
 
 - AWS_ACCESS_KEY_ID
 - AWS_SECRET_ACCESS_KEY
-- PROD_CONNECTION_URL
-- ROLLBAR_ACCESS_TOKEN
-- OTEL_EXPORTER_OTLP_HEADERS
+- CONNECTION_URL
+- MONGO_URL
+- $JWT_TOKEN
 
 [specifying-sensitive-data](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html)
 
@@ -230,9 +230,9 @@ Make sure the following are set as environment variables before running the foll
 ```sh
 aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/AWS_ACCESS_KEY_ID" --value $AWS_ACCESS_KEY_ID
 aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY" --value $AWS_SECRET_ACCESS_KEY
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/CONNECTION_URL" --value $PROD_CONNECTION_URL
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/ROLLBAR_ACCESS_TOKEN" --value $ROLLBAR_ACCESS_TOKEN
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/OTEL_EXPORTER_OTLP_HEADERS" --value $OTEL_EXPORTER_OTLP_HEADERS
+aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/CONNECTION_URL" --value $CONNECTION_URL
+aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/MONGO_URL" --value $MONGO_URL
+aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/MONGO_URL" --value $JWT_TOKEN
 ```
 
 ### Create Task and Exection Roles for Task Defintion
@@ -256,10 +256,10 @@ In the aws directory create a json file `/policies/service-execution-role.json` 
 }
 ```
 
-Create the `vacation-vibeServiceExecutionRole`
+Create the `vacation-vibeTaskExecutionRole`
 
 ```sh
-aws iam create-role --role-name vacation-vibeServiceExecutionRole --assume-role-policy-document file://aws/policies/service-execution-role.json
+aws iam create-role --role-name vacation-vibeTaskExecutionRole --assume-role-policy-document file://aws/policies/service-execution-role.json
 ```
 
 Now create another json file `/policies/service-execution-policy.json` and add the following content
@@ -292,10 +292,10 @@ Now create another json file `/policies/service-execution-policy.json` and add t
 }
 ```
 
-Attach the `vacation-vibeServiceExecutionPolicy` policy
+Attach the `vacation-taskExecutionPolicy` policy
 
 ```sh
-aws iam put-role-policy --policy-name vacation-vibeServiceExecutionPolicy --role-name vacation-vibeServiceExecutionRole --policy-document file://aws/policies/service-execution-policy.json
+aws iam put-role-policy --policy-name vacation-taskExecutionPolicy --role-name vacation-vibeTaskExecutionRole --policy-document file://aws/policies/service-execution-policy.json
 ```
 
 #### Create TaskRole
@@ -362,7 +362,7 @@ Create a new folder called `aws/task-definitions` and place the following file i
 ```json
 {
   "family": "backend",
-  "executionRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeServiceExecutionRole",
+  "executionRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeTaskExecutionRole",
   "taskRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeTaskRole",
   "networkMode": "awsvpc",
   "containerDefinitions": [
@@ -757,7 +757,7 @@ Create a new folder called `aws/task-definitions` and place the following file i
 ```json
 {
   "family": "backend",
-  "executionRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeServiceExecutionRole",
+  "executionRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeTaskExecutionRole",
   "taskRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeTaskRole",
   "networkMode": "awsvpc",
   "containerDefinitions": [
@@ -931,7 +931,7 @@ Goto `aws/task-definitions` and place the following file in there:
 ```json
 {
   "family": "frontend-react",
-  "executionRoleArn": "arn:aws:iam::183066416469:role/vacation-vibeServiceExecutionRole",
+  "executionRoleArn": "arn:aws:iam::183066416469:role/vacation-vibeTaskExecutionRole",
   "taskRoleArn": "arn:aws:iam::183066416469:role/vacation-vibeTaskRole",
   "networkMode": "awsvpc",
   "cpu": "256",
