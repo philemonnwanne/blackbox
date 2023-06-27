@@ -4,21 +4,30 @@ variable "backend_security_group_name" {
   default     = "backend-security-group"
 }
 
-variable "backend_security_group_ingress_cidr" {
+variable "ingress_cidr_blocks" {
   description = "security group inbound CIDR block"
   type        = list(string)
   default     = ["0.0.0.0/0"]
 }
 
-variable "backend_security_group_ingress_rules" {
-  description = "security group inbound rules"
+variable "backend_ingress_rules" {
+  description = "ecs backend service inbound rules"
   type        = list(string)
-  default     = [
-    # "http-80-tcp",
-    # "https-443-tcp",
-    # "ssh-tcp",
-    "4000-tcp"
-    ]
+  default     = ["http-80-tcp"]
+}
+
+variable "backend_ingress_with_cidr_blocks" {
+  description = "ecs backend service ports"
+  type        = list(map(string))
+  default = [
+    {
+      from_port   = 4000
+      to_port     = 4000
+      protocol    = "tcp"
+      description = "ecs backend service ports"
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
 }
 
 variable "vpc_id" {
@@ -26,13 +35,13 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "security_group_egress_cidr" {
+variable "egress_cidr_blocks" {
   description = "security group outbound CIDR block"
   type        = list(string)
   default     = ["0.0.0.0/0"]
 }
 
-variable "security_group_egress_rules" {
+variable "egress_rules" {
   description = "security group outbound rules"
   type        = list(string)
   default     = ["all-all"]
@@ -44,17 +53,11 @@ variable "alb_security_group_name" {
   default     = "alb-security-group"
 }
 
-variable "alb_security_group_ingress_cidr" {
-  description = "security group inbound CIDR block"
-  type        = list(string)
-  default     = ["0.0.0.0/0"]
-}
-
-variable "alb_security_group_ingress_rules" {
+variable "alb_ingress_rules" {
   description = "security group inbound rules"
   type        = list(any)
-  default     = [
+  default = [
     "http-80-tcp",
     "https-443-tcp"
-    ]
+  ]
 }
