@@ -1,5 +1,5 @@
 # ========= ========
-    #Build Image
+    #Build Environment
 # ========= ========
 FROM node:16.20.0-alpine3.18 AS build
 
@@ -14,7 +14,7 @@ RUN npm install \
 COPY . .
 
 # ========= ========
-    #Prod Image
+    #Prod Environment
 # ========= ========
 
 FROM nginx:stable-alpine-slim
