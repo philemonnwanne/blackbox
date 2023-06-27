@@ -5,7 +5,7 @@ FROM node:16.20.0-alpine3.18 AS build
 
 WORKDIR /frontend
 
-COPY package*.json ./
+COPY package*.json .
 
 RUN npm install \
     # create build artifacts from stage 0
