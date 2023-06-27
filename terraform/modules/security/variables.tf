@@ -24,7 +24,7 @@ variable "backend_ingress_with_cidr_blocks" {
       from_port   = 4000
       to_port     = 4000
       protocol    = "tcp"
-      description = "CUSTOM"
+      description = "ecs backend service ports"
       cidr_blocks = "0.0.0.0/0"
     }
   ]
