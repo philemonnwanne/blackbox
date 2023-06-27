@@ -11,7 +11,7 @@ module "security" {
 module "ecs" {
   source = "../../modules/ecs"
 
-  security_groups = module.security.alb_security_group_id[*]
+  security_groups = module.security.backend_security_group_id[*]
   # subnet_ids = module.vpc.vpc_private_subnet_id
   subnet_ids = module.vpc.vpc_public_subnet_id
   # tags = local.tags
