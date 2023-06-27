@@ -204,7 +204,7 @@ app.get("/api/user-places", (req, res) => {
   mongoose.connect(process.env.MONGO_URL);
   const { token } = req.cookies;
   jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-    const { id } = userData;
+    const { id } = userData || {};
     res.json(await Place.find({ owner: id }));
   });
 });
