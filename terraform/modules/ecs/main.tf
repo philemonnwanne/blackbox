@@ -8,7 +8,7 @@ resource "aws_ecs_cluster" "vacation-vibe" {
 
 resource "aws_ecs_task_definition" "backend" {
   family             = "${var.task_name}"
-  execution_role_arn = aws_iam_role.service_role.arn
+  execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
   container_definitions = <<DEFINITION
   [
@@ -84,8 +84,8 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-resource "aws_iam_role" "service_role" {
-  name               = "Vacation-VibeServiceExecutionRole"
+resource "aws_iam_role" "task_execution_role" {
+  name               = "Vacation-vibeTaskExecutionRole"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 # resource "aws_iam_role" "task_role" {
@@ -94,7 +94,7 @@ resource "aws_iam_role" "service_role" {
 # }
 # ------------------------- Step 1
 # create policy document
-data "aws_iam_policy_document" "service_policy" {
+data "aws_iam_policy_document" "task_execution_policy" {
   statement {
     effect = "Allow"
     actions = [
@@ -117,25 +117,25 @@ data "aws_iam_policy_document" "service_policy" {
   }
 }
 # --------------------- Step 2
-# link policy documnet to `aws_iam_policy` resource
-resource "aws_iam_policy" "service_policy" {
-   name        = "ecs-service-execution-policy"
+# link policy document to `aws_iam_policy` resource
+resource "aws_iam_policy" "task_execution_policy" {
+   name        = "vacation-vibe-task-execution-policy"
    description = ""
-   policy      = data.aws_iam_policy_document.service_policy.json
+   policy      = data.aws_iam_policy_document.task_execution_policy.json
 }
 
 # ----------------------- Step 3
 # attaches the `aws_iam_policy` resource policy to the role in sstep 0
-resource "aws_iam_role_policy_attachment" "service_role_policy_attachment" {
-  role       = aws_iam_role.service_role.name
-  policy_arn = aws_iam_policy.service_policy.arn
+resource "aws_iam_role_policy_attachment" "task_execution_role_policy_attachment" {
+  role       = aws_iam_role.task_execution_role.name
+  policy_arn = aws_iam_policy.task_execution_policy.arn
 }
 
 
 # -------------------------
 
 resource "aws_iam_role" "task_role" {
-  name               = "Vacation-VibeTaskRole"
+  name               = "Vacation-vibeTaskRole"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 # ------------------------- Step 1
@@ -153,9 +153,9 @@ data "aws_iam_policy_document" "task_policy" {
   }
 }
 # --------------------- Step 2
-# link policy documnet to `aws_iam_policy` resource
+# link policy documentt to `aws_iam_policy` resource
 resource "aws_iam_policy" "task_policy" {
-   name        = "ecs-task-policy"
+   name        = "vacation-vibe-task-policy"
    description = ""
    policy      = data.aws_iam_policy_document.task_policy.json
 }
