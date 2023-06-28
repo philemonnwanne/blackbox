@@ -207,34 +207,40 @@ resource "aws_ecs_service" "backend" {
   # }
 
   # register service discovery resource with ECS service
-  # service_registries {
-  #   registry_arn = "${aws_service_discovery_service.service_discovery_service.arn}"
-  # }
+  service_registries {
+    registry_arn = "${aws_service_discovery_service.service_discovery_service.arn}"
+  }
 }
 
 # create a private service discovery DNS namespace for our ECS service
-# resource "aws_service_discovery_private_dns_namespace" "service_discovery_namespace" {
-#   name = "${var.domain_name}" # ecsdemo.cloud
-#   vpc  = data.terraform_remote_state.vpc.outputs.vpc_id
-# }
+resource "aws_service_discovery_private_dns_namespace" "service_discovery_namespace" {
+  name = "${var.domain_name}" # ecsdemo.cloud
+  vpc  = "${var.cluster_name}" 
+}
 
-# # associate private DNS namespace with aws_service_discovery_service resource
-# resource "aws_service_discovery_service" "service_discovery_service" {
-#   name = var.service_discovery_service #wp
-#   dns_config {
-#     namespace_id   = aws_service_discovery_private_dns_namespace.service_discovery_namespace.id
-#     routing_policy = "MULTIVALUE"
-#     dns_records {
-#       ttl  = 10
-#       type = "A"
-#     }
-#   }
-#   health_check_custom_config {
-#     failure_threshold = 5
-#   }
-# }
+# associate private DNS namespace with aws_service_discovery_service resource
+resource "aws_service_discovery_service" "service_discovery_service" {
+  name = "${var.cluster_name}" #wp
+  dns_config {
+    namespace_id   = aws_service_discovery_private_dns_namespace.service_discovery_namespace.id
+    routing_policy = "MULTIVALUE"
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+  health_check_custom_config {
+    failure_threshold = 5
+  }
+}
 
 locals {
   protocol = "tcp"
   app_protocol = "http"
 }
+
+# Will use this later, why? I don't remember, sha stay here mr/mrs resource
+# resource "aws_service_discovery_private_dns_namespace" "ecs" {
+#   name = var.private_dns_name # ecsdemo.cloud
+#   vpc  = data.terraform_remote_state.vpc.outputs.vpc_id
+# }

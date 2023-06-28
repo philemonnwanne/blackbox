@@ -39,7 +39,7 @@ variable "cluster_settings" {
 variable "domain_name" {
   description = "custom domain name e.g.#mydomain.org"
   type = string
-  default = ""
+  default = "philemonnwanne.me"
 }
 
 variable "system_req" {
