@@ -186,6 +186,7 @@ resource "aws_ecs_service" "backend" {
   cluster              = "${aws_ecs_cluster.vacation-vibe.id}"
   launch_type          = "FARGATE"
   desired_count        = 1
+  # depends_on      = [aws_iam_role_policy.foo] #To prevent a race condition during service deletion, we may not need tthis
   lifecycle {
     ignore_changes = [
         desired_count, 
@@ -195,16 +196,16 @@ resource "aws_ecs_service" "backend" {
   enable_ecs_managed_tags = true
   # enable_execute_command = true only if we need to exec container and have ssm agent installed
   network_configuration {
-    assign_public_ip = true
+    assign_public_ip = false
     security_groups = var.security_groups
     subnets = var.subnet_ids
   }
   # propagateTags   = "SERVICE"
-  # load_balancer {
-  #   target_group_arn = module.vpc.vpc_id
-  #   container_name   = "${var.task_name}"
-  #   container_port   = "${var.container_port}"
-  # }
+  load_balancer {
+    target_group_arn = "${var.target_group_arn}"
+    container_name   = "${var.task_name}"
+    container_port   = "${var.container_port}"
+  }
 
   # register service discovery resource with ECS service
   service_registries {

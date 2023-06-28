@@ -11,7 +11,7 @@ variable "ingress_cidr_blocks" {
 }
 
 variable "backend_ingress_rules" {
-  description = "ecs backend service inbound rules"
+  description = "allow traffic to the container"
   type        = list(string)
   default     = ["http-80-tcp"]
 }
@@ -54,7 +54,7 @@ variable "alb_security_group_name" {
 }
 
 variable "alb_ingress_rules" {
-  description = "security group inbound rules"
+  description = "allow traffic to the load balancer"
   type        = list(any)
   default = [
     "http-80-tcp",

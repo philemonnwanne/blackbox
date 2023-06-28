@@ -87,6 +87,11 @@ variable "environment" {
 #   type = any
 # }
 
+variable "target_group_arn" {
+  description = "arn of the target group"
+  type = string
+}
+
 variable "secret_manager_arn" {
   description = "the containers name"
   type = string

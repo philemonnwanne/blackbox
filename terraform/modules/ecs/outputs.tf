@@ -3,7 +3,7 @@
 #     value = aws_ecs_service.backend.network_configuration
 # }
 
-# output "lb_zone_id" {
-#   description = "the zone_id of the load balancer to assist with creating DNS records"
-#   value = module.alb.lb_zone_id
+# output "backend_task_id" {
+#   description = "id of the backend container"
+#   value = aws_ecs_service.backend.id
 # }

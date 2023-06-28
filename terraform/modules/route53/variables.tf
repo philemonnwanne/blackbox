@@ -3,7 +3,7 @@ variable "zone_id" {
   default = "Z05533031DW7NWR1EH80D"
 }
 
-variable "records" {
-  description = "list of object of DNS records"
-  default = ""
-}
+# variable "records" {
+#   description = "list of object of DNS records"
+#   default = ""
+# }

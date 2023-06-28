@@ -9,5 +9,5 @@ module "records" {
   version = "~> 2.0"
 
   zone_id = data.aws_route53_zone.zone.zone_id
-  records = var.records
+  # records = var.records
 }
