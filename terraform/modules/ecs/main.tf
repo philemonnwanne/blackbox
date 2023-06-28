@@ -1,20 +1,20 @@
 resource "aws_ecs_cluster" "vacation-vibe" {
-  name = "vacation-vibe"
+  name = "${var.cluster_name}"
   setting {
-    name  = "containerInsights"
-    value = "disabled"
+    name = "containerInsights"
+    value = var.cluster_settings["value"]
   }
 }
 
 resource "aws_ecs_task_definition" "backend" {
-  family             = "backend"
+  family             = "${var.task_name}"
   execution_role_arn = aws_iam_role.service_role.arn
-  task_role_arn = aws_iam_role.task_role.arn
-  container_definitions = <<EOF
+  task_role_arn      = aws_iam_role.task_role.arn
+  container_definitions = <<DEFINITION
   [
     {
-        "name": "backend",
-        "image": "183066416469.dkr.ecr.us-east-1.amazonaws.com/backend",
+        "name": "${var.task_name}",
+        "image": "${var.ecr_image_uri}.ecr.${var.aws_region}.amazonaws.com/${var.task_name}",
         "essential": true,
         "healthCheck": {
         "command": ["CMD-SHELL", "npm --version || exit 1"],
@@ -25,52 +25,52 @@ resource "aws_ecs_task_definition" "backend" {
         },
         "portMappings": [
         {
-            "containerPort": 4000,
-            "protocol": "tcp",
-            "appProtocol": "http"
+          "containerPort": ${var.container_port},
+          "protocol": "${local.protocol}",
+          "appProtocol": "${local.app_protocol}"
         }
         ],
         "logConfiguration": {
-        "logDriver": "awslogs",
+        "logDriver": "${var.log_driver}",
         "options": {
-            "awslogs-region": "us-east-1",
-            "awslogs-group": "/ecs/backend",
-            "awslogs-stream-prefix": "ecs"
+          "awslogs-region": "${var.aws_region}",
+          "awslogs-group": "${var.log_group}",
+          "awslogs-stream-prefix": "ecs"
         }
         },
         "environment": [
-        { "name": "S3_BUCKET_NAME", "value": "vacation-vibe" },
+        { "name": "S3_BUCKET_NAME", "value": "${var.cluster_name}" },
         { "name": "FRONTEND_URL", "value": "*" },
         { "name": "BACKEND_URL", "value": "*" },
-        { "name": "AWS_REGION", "value": "us-east-1" }
+        { "name": "AWS_REGION", "value": "${var.aws_region}" }
         ],
         "secrets": [
         {
             "name": "AWS_ACCESS_KEY_ID",
-            "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/AWS_ACCESS_KEY_ID"
+            "valueFrom": "${var.secret_manager_arn}/AWS_ACCESS_KEY_ID"
         },
         {
             "name": "AWS_SECRET_ACCESS_KEY",
-            "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY"
+            "valueFrom": "${var.secret_manager_arn}/AWS_SECRET_ACCESS_KEY"
         },
         
         {
             "name": "JWT_TOKEN",
-            "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/JWT_TOKEN"
+            "valueFrom": "${var.secret_manager_arn}/JWT_TOKEN"
         }
         ]
     }
   ]
-  EOF
+  DEFINITION
   # These are the minimum values for Fargate containers.
-  cpu                      = 256
-  memory                   = 512
+  cpu                      = "${var.system_req.0}"
+  memory                   = "${var.system_req[1]}"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
 }
 
 resource "aws_cloudwatch_log_group" "backend" {
-  name = "/ecs/backend"
+  name = "${var.log_group}"
 }
 
 # ------------------------- Step 0
@@ -182,8 +182,8 @@ resource "aws_iam_role_policy_attachment" "task_role_policy_attachment" {
 
 resource "aws_ecs_service" "backend" {
   name                 = "backend"
-  task_definition = aws_ecs_task_definition.backend.arn
-  cluster              = aws_ecs_cluster.vacation-vibe.id
+  task_definition      = aws_ecs_task_definition.backend.arn
+  cluster              = "${aws_ecs_cluster.vacation-vibe.id}"
   launch_type          = "FARGATE"
   desired_count        = 1
   lifecycle {
@@ -193,7 +193,7 @@ resource "aws_ecs_service" "backend" {
       ]
     }
   enable_ecs_managed_tags = true
-  # enable_execute_command = true only if we need to exec container and have ss
+  # enable_execute_command = true only if we need to exec container and have ssm agent installed
   network_configuration {
     assign_public_ip = true
     security_groups = var.security_groups
@@ -201,35 +201,40 @@ resource "aws_ecs_service" "backend" {
   }
   # propagateTags   = "SERVICE"
   # load_balancer {
-  #   # target_group_arn = module.vpc.vpc_id
-  #   container_name   = "backend"
-  #   container_port   = "4000"
+  #   target_group_arn = module.vpc.vpc_id
+  #   container_name   = "${var.task_name}"
+  #   container_port   = "${var.container_port}"
   # }
 
   # register service discovery resource with ECS service
-  service_registries {
-    registry_arn = "${aws_service_discovery_service.service_discovery_service.arn}"
-  }
+  # service_registries {
+  #   registry_arn = "${aws_service_discovery_service.service_discovery_service.arn}"
+  # }
 }
 
 # create a private service discovery DNS namespace for our ECS service
-resource "aws_service_discovery_private_dns_namespace" "service_discovery_namespace" {
-  name = var.private_dns_name # ecsdemo.cloud
-  vpc  = data.terraform_remote_state.vpc.outputs.vpc_id
-}
+# resource "aws_service_discovery_private_dns_namespace" "service_discovery_namespace" {
+#   name = "${var.domain_name}" # ecsdemo.cloud
+#   vpc  = data.terraform_remote_state.vpc.outputs.vpc_id
+# }
 
-# associate private DNS namespace with aws_service_discovery_service resource
-resource "aws_service_discovery_service" "service_discovery_service" {
-  name = var.service_discovery_service #wp
-  dns_config {
-    namespace_id   = aws_service_discovery_private_dns_namespace.service_discovery_namespace.id
-    routing_policy = "MULTIVALUE"
-    dns_records {
-      ttl  = 10
-      type = "A"
-    }
-  }
-  health_check_custom_config {
-    failure_threshold = 5
-  }
+# # associate private DNS namespace with aws_service_discovery_service resource
+# resource "aws_service_discovery_service" "service_discovery_service" {
+#   name = var.service_discovery_service #wp
+#   dns_config {
+#     namespace_id   = aws_service_discovery_private_dns_namespace.service_discovery_namespace.id
+#     routing_policy = "MULTIVALUE"
+#     dns_records {
+#       ttl  = 10
+#       type = "A"
+#     }
+#   }
+#   health_check_custom_config {
+#     failure_threshold = 5
+#   }
+# }
+
+locals {
+  protocol = "tcp"
+  app_protocol = "http"
 }
