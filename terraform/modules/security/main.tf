@@ -8,7 +8,7 @@ module "backend_security_group" {
   name        = var.backend_security_group_name
   description = "security group controlling traffic to backend container downstream the application load balancer"
   vpc_id              = var.vpc_id
-  # ingress_cidr_blocks = "${var.ingress_cidr_blocks}"
+  
   ingress_with_source_security_group_id = [
     {
       from_port   = local.backend_port
@@ -19,8 +19,6 @@ module "backend_security_group" {
       source_security_group_id = module.alb_security_group.security_group_id
     }
   ]
-  # ingress_rules       = var.backend_ingress_rules
-  security_group_id = module.alb_security_group.security_group_id
   egress_cidr_blocks  = "${var.egress_cidr_blocks}"
   egress_rules        = var.egress_rules
   egress_ipv6_cidr_blocks = []

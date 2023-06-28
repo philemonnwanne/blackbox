@@ -7,14 +7,9 @@ resource "aws_lb_target_group" "alb_tg" {
   vpc_id      = var.vpc_id
   health_check {
     enabled = true
-    path    = "/api/"
-    interval            = 10
-    port                = "traffic-port"
-    healthy_threshold   = 2
-    unhealthy_threshold = 5
-    timeout             = 6
+    path    = "/api"
   }
-  depends_on = [aws_alb.alb]
+  # depends_on = [aws_alb.alb]
 }
 
 resource "aws_alb" "alb" {

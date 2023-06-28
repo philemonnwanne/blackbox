@@ -57,6 +57,10 @@ resource "aws_ecs_task_definition" "backend" {
         {
             "name": "JWT_TOKEN",
             "valueFrom": "${var.secret_manager_arn}/JWT_TOKEN"
+        },
+        {
+            "name": "MONGO_URL",
+            "valueFrom": "${var.secret_manager_arn}/MONGO_URL"
         }
         ]
     }
@@ -196,7 +200,7 @@ resource "aws_ecs_service" "backend" {
   enable_ecs_managed_tags = true
   # enable_execute_command = true only if we need to exec container and have ssm agent installed
   network_configuration {
-    assign_public_ip = false
+    assign_public_ip = true
     security_groups = var.security_groups
     subnets = var.subnet_ids
   }
@@ -206,34 +210,45 @@ resource "aws_ecs_service" "backend" {
     container_name   = "${var.task_name}"
     container_port   = "${var.container_port}"
   }
+  # service_connect_configuration {
+  #   enabled = true
+  #   namespace = var.cluster_name
+  #   service {
+  #     port_name = var.task_name
+  #     discovery_name = var.task_name
+  #     client_alias {
+  #       port = var.container_port
+  #     }
+  #   }
+  # }
 
   # register service discovery resource with ECS service
-  service_registries {
-    registry_arn = "${aws_service_discovery_service.service_discovery_service.arn}"
-  }
+  # service_registries {
+  #   registry_arn = "${aws_service_discovery_service.service_discovery_service.arn}"
+  # }
 }
 
 # create a private service discovery DNS namespace for our ECS service
-resource "aws_service_discovery_private_dns_namespace" "service_discovery_namespace" {
-  name = "${var.domain_name}" # ecsdemo.cloud
-  vpc  = var.vpc_id
-}
+# resource "aws_service_discovery_private_dns_namespace" "service_discovery_namespace" {
+#   name = "${var.domain_name}" # ecsdemo.cloud
+#   vpc  = var.vpc_id
+# }
 
-# associate private DNS namespace with aws_service_discovery_service resource
-resource "aws_service_discovery_service" "service_discovery_service" {
-  name = "${var.cluster_name}" #wp
-  dns_config {
-    namespace_id   = aws_service_discovery_private_dns_namespace.service_discovery_namespace.id
-    routing_policy = "MULTIVALUE"
-    dns_records {
-      ttl  = 10
-      type = "A"
-    }
-  }
-  health_check_custom_config {
-    failure_threshold = 5
-  }
-}
+# # associate private DNS namespace with aws_service_discovery_service resource
+# resource "aws_service_discovery_service" "service_discovery_service" {
+#   name = "${var.cluster_name}" #wp
+#   dns_config {
+#     namespace_id   = aws_service_discovery_private_dns_namespace.service_discovery_namespace.id
+#     routing_policy = "MULTIVALUE"
+#     dns_records {
+#       ttl  = 10
+#       type = "A"
+#     }
+#   }
+#   health_check_custom_config {
+#     failure_threshold = 5
+#   }
+# }
 
 locals {
   protocol = "tcp"
