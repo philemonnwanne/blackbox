@@ -15,6 +15,7 @@ module "ecs" {
   # subnet_ids = module.vpc.vpc_private_subnet_id
   subnet_ids = module.vpc.vpc_public_subnet_id
   # tags = local.tags
+  vpc_id = module.vpc.vpc_id
 }
 
 # terraform {

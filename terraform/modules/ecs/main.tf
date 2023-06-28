@@ -215,7 +215,7 @@ resource "aws_ecs_service" "backend" {
 # create a private service discovery DNS namespace for our ECS service
 resource "aws_service_discovery_private_dns_namespace" "service_discovery_namespace" {
   name = "${var.domain_name}" # ecsdemo.cloud
-  vpc  = "${var.cluster_name}" 
+  vpc  = var.vpc_id
 }
 
 # associate private DNS namespace with aws_service_discovery_service resource

@@ -1,3 +1,8 @@
+variable "vpc_id" {
+  description = "vpc id"
+  type = string
+}
+
 variable "cluster_name" {
   description = "name of the cluster"
   type = string
