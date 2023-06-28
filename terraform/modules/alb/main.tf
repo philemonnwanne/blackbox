@@ -7,7 +7,7 @@ resource "aws_lb_target_group" "alb_tg" {
   vpc_id      = var.vpc_id
   health_check {
     enabled = true
-    path    = "/"
+    path    = "/api/"
     interval            = 10
     port                = "traffic-port"
     healthy_threshold   = 2
@@ -29,7 +29,7 @@ resource "aws_alb" "alb" {
 
 resource "aws_alb_listener" "alb_http" {
   load_balancer_arn = aws_alb.alb.arn
-  port              = local.http_port
+  port              = local.backend_port
   protocol          = local.http_protocol
   default_action {
     type             = "forward"
