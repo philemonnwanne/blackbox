@@ -1,15 +1,33 @@
-FROM node:16.20.0-alpine3.18
+# ========= ========
+    #Build Environment
+# ========= ========
+FROM node:16.20.0-alpine3.18 AS build
 
-# ENV PORT=5173
+ARG REACT_APP_BACKEND_URL
 
 WORKDIR /frontend
 
-COPY . .
+ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+
+COPY package*.json .
 
 RUN npm install
 
-# USER node
+COPY . .
 
-# EXPOSE ${PORT}
+# create build artifacts from stage 0
+RUN npm run build 
 
-CMD ["npm", "run", "dev"]
+# ========= ========
+    #Prod Environment
+# ========= ========
+
+FROM nginx:stable-alpine-slim
+
+# copy the updated virtual server configuration to replace the default Nginx configuration
+COPY --from=build /frontend/nginx.conf /etc/nginx/nginx.conf
+
+# copy only the production-related application code from the image built by the previous stage
+COPY --from=build /frontend/dist /usr/share/nginx/html
+
+EXPOSE 5173

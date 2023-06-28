@@ -185,15 +185,15 @@ resource "aws_ecs_service" "backend" {
   task_definition = aws_ecs_task_definition.backend.arn
   cluster              = aws_ecs_cluster.vacation-vibe.id
   launch_type          = "FARGATE"
+  desired_count        = 1
   lifecycle {
     ignore_changes = [
         desired_count, 
         task_definition
       ]
     }
-  desired_count        = 1
   enable_ecs_managed_tags = true
-  # enable_execute_command = true
+  # enable_execute_command = true only if we need to exec container and have ss
   network_configuration {
     assign_public_ip = true
     security_groups = var.security_groups
@@ -206,4 +206,30 @@ resource "aws_ecs_service" "backend" {
   #   container_port   = "4000"
   # }
 
+  # register service discovery resource with ECS service
+  service_registries {
+    registry_arn = "${aws_service_discovery_service.service_discovery_service.arn}"
+  }
+}
+
+# create a private service discovery DNS namespace for our ECS service
+resource "aws_service_discovery_private_dns_namespace" "service_discovery_namespace" {
+  name = var.private_dns_name # ecsdemo.cloud
+  vpc  = data.terraform_remote_state.vpc.outputs.vpc_id
+}
+
+# associate private DNS namespace with aws_service_discovery_service resource
+resource "aws_service_discovery_service" "service_discovery_service" {
+  name = var.service_discovery_service #wp
+  dns_config {
+    namespace_id   = aws_service_discovery_private_dns_namespace.service_discovery_namespace.id
+    routing_policy = "MULTIVALUE"
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+  health_check_custom_config {
+    failure_threshold = 5
+  }
 }

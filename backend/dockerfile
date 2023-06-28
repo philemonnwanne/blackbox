@@ -1,10 +1,12 @@
-FROM 183066416469.dkr.ecr.us-east-1.amazonaws.com/vacation-vibe-nodejs:3.11.3-alpine
+FROM 183066416469.dkr.ecr.us-east-1.amazonaws.com/backend:alpine3
 
 WORKDIR /backend
 
-COPY . .
+COPY package*.json .
 
 RUN npm install
+
+COPY . .
 
 USER node
 

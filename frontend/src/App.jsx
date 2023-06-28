@@ -13,13 +13,13 @@ import PlacesFormPage from "./pages/PlacesFormPage";
 import BookingPage from "./pages/BookingPage.jsx";
 import BookingsPage from "./pages/BookingsPage.jsx";
 
-// const pathy = process.env.REACT_APP_BACKEND_URL;
+const pathy = process.env.REACT_APP_BACKEND_URL;
 // const pathy = import.meta.env.VITE_BACKEND_URL;
-// alert("this is a dev file");
-// alert(`the default path is: ${pathy}`);
+alert("this is a dev file");
+alert(`the default path is: ${pathy}`);
 
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
-// axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+// axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
 axios.defaults.withCredentials = true;
 
 function App() {

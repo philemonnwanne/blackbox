@@ -7,9 +7,9 @@ services:
     # image: imageName
     container_name: ${APP_NAME}-frontend
     environment:
-      BACKEND_URL: "${LOCAL_BACKEND_URL}"
+      REACT_APP_BACKEND_URL: "${LOCAL_BACKEND_URL}"
     healthcheck:
-      test: npm --version || exit 1
+      test: curl -so /dev/null http://localhost/ || exit 1
       interval: 30s
       retries: 5
       start_period: 5s
@@ -51,19 +51,19 @@ services:
       - /backend/node_modules
     
 # Database Service [Mongo]
-  mongodb:
-    image: mongo:6.0.6@sha256:028c34749ed62d1c4298b52cb0dc46099e366b59c2d2456dac0decc46f0701aa
-    container_name: mongodb
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-    networks:
-      - ${APP_NAME}-network
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongodb_data:/data/db
-    restart: always
+  # mongodb:
+  #   image: mongo:6.0.6@sha256:028c34749ed62d1c4298b52cb0dc46099e366b59c2d2456dac0decc46f0701aa
+  #   container_name: mongodb
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: root
+  #   networks:
+  #     - ${APP_NAME}-network
+  #   ports:
+  #     - '27017:27017'
+  #   volumes:
+  #     - mongodb_data:/data/db
+  #   restart: always
 
 # Database Management System [Mongo-Express]
   # mongo-express:

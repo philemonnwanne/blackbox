@@ -3,13 +3,13 @@ version: "3.8"
 services:
   # Frontend Service
   frontend:
-    build: ./frontend/dockerfile.frontend
+    build: ./frontend
     # image: imageName
     container_name: ${APP_NAME}-frontend
     environment:
       BACKEND_URL: "https://4000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
     healthcheck:
-      test: npm --version || exit 1
+      test: curl -so /dev/null http://localhost/ || exit 1
       interval: 30s
       retries: 5
       start_period: 5s
@@ -50,20 +50,30 @@ services:
       - ./backend:/backend
       - /backend/node_modules
     
+# Docker Networks
+networks:
+  vacationvibe-network:
+    driver: bridge
+
+# Docker Volumes
+volumes:
+  mongodb_data:
+    driver: local
+
 # Database Service [Mongo]
-  mongodb:
-    image: mongo:6.0.6@sha256:5a784524a939be08f0024d8f91455745d98631dbb426e18ce0cd9bc128e7f82e
-    container_name: mongodb
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
-      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_USERNAME}"
-    networks:
-      - ${APP_NAME}-network
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongodb_data:/data/db
-    restart: always
+  # mongodb:
+  #   image: mongo:6.0.6@sha256:5a784524a939be08f0024d8f91455745d98631dbb426e18ce0cd9bc128e7f82e
+  #   container_name: mongodb
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
+  #     MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_USERNAME}"
+  #   networks:
+  #     - ${APP_NAME}-network
+  #   ports:
+  #     - '27017:27017'
+  #   volumes:
+  #     - mongodb_data:/data/db
+  #   restart: always
 
 # Database Management System [Mongo-Express]
   # mongo-express:
@@ -78,13 +88,3 @@ services:
   #   ports:
   #     - 8081:8081
   #   restart: always
-
-# Docker Networks
-networks:
-  vacationvibe-network:
-    driver: bridge
-
-# Docker Volumes
-volumes:
-  mongodb_data:
-    driver: local
