@@ -1,4 +1,4 @@
-variable "env_names" {
+variable "environments" {
   type = map(string)
 
   default = {
