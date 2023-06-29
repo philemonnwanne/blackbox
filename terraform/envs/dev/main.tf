@@ -30,9 +30,11 @@ module "ecs" {
 #   }
 # }
 
-# module "cloudfront" {
-#   source = "../../modules/cloudfront"
-# }
+module "cloudfront" {
+  source = "../../modules/cloudfront"
+
+  domain_name = "${module.alb.alb_dns}"
+}
 
 module "route53" {
   source = "../../modules/route53"

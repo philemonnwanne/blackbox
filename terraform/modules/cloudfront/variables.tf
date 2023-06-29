@@ -4,6 +4,11 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "domain_name" {
+  description = "aws region"
+  type        = string
+}
+
 variable "allowed_methods" {
   description = "controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin"
   type        = list(string)
@@ -30,20 +35,20 @@ variable "path_pattern" {
 
 variable "viewer_protocol_policy" {
   description = "protocol that users can use to access the files in the origin specified by TargetOriginId when a request matches the path pattern in PathPattern"
-  type        = string
-  default     = "redirect-to-https"
+  type        = list(string)
+  default     = ["allow-all", "redirect-to-https"]
 }
 
 variable "s3_origin_id" {
   description = "unique identifier for the s3 bucket origin"
   type        = string
-  default     = "vacation-vibe-origin"
+  default     = "vacation-vibe-s3-origin"
 }
 
 variable "alb_origin_id" {
   description = "unique identifier for the load balancer origin"
   type        = string
-  default     = "vacation-vibe-alb"
+  default     = "vacation-vibe-alb-origin"
 }
 
 variable "environment" {
