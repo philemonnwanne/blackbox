@@ -12,6 +12,7 @@ const mime = require("mime-types");
 const User = require("./models/User");
 const Place = require("./models/Place");
 const Booking = require("./models/Booking");
+const { constants } = require("buffer");
 require("dotenv").config();
 
 const bcryptSalt = bcrypt.genSaltSync(10);
@@ -30,12 +31,32 @@ app.use(cookieParser());
 //   next();
 // });
 
-app.use(
-  cors({
-    credentials: true,
-    origin: process.env.FRONTEND_URL,
-  })
-);
+// 👇️ specify origins to allow
+// const whitelist = [process.env.FRONTEND_URL, 'http://127.0.0.1:5173', 'http://example2.com'];
+const whitelist = ['http://127.0.0.1:5173', 'http://*.cloudfront.net'];
+
+// ✅ Enable pre-flight requests
+app.options('*', cors());
+
+const corsOptions = {
+  credentials: true,
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+app.use(cors(corsOptions));
+
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: process.env.FRONTEND_URL,
+//   })
+// );
 
 async function uploadToS3(path, originalFilename, mimetype) {
   const client = new S3Client({
