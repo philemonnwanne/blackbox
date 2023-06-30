@@ -1,7 +1,5 @@
 FROM node:16.20.0-alpine3.18
 
-ENV PORT=5173
-
 WORKDIR /frontend
 
 COPY . .
@@ -9,7 +7,5 @@ COPY . .
 RUN npm install
 
 # USER node
-
-EXPOSE ${PORT}
 
 CMD ["npm", "run", "dev"]

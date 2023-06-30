@@ -1,4 +1,4 @@
-FROM 183066416469.dkr.ecr.us-east-1.amazonaws.com/backend:alpine3
+FROM node:16.20.0-alpine3.18
 
 WORKDIR /backend
 
