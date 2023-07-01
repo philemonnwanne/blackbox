@@ -189,7 +189,7 @@ resource "aws_ecs_service" "backend" {
   task_definition      = aws_ecs_task_definition.backend.arn
   cluster              = "${aws_ecs_cluster.vacation-vibe.id}"
   launch_type          = "FARGATE"
-  desired_count        = 1
+  desired_count        = 5
   # depends_on      = [aws_iam_role_policy.foo] #To prevent a race condition during service deletion, we may not need tthis
   lifecycle {
     ignore_changes = [
