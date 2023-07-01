@@ -7,6 +7,7 @@ variable "aws_region" {
 variable "domain_name" {
   description = "aws region"
   type        = string
+  default = "backend.philemonnwanne.me"
 }
 
 variable "allowed_methods" {

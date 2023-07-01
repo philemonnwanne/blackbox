@@ -53,6 +53,7 @@ resource "aws_cloudfront_distribution" "vacation_vibe_distribution" {
   enabled             = true
   comment             = "production distribution for vacation-vibe"
   default_root_object = "index.html"
+  aliases = ["frontend.philemonnwanne.me"]
 
   origin {
     domain_name = var.domain_name
@@ -121,7 +122,16 @@ resource "aws_cloudfront_distribution" "vacation_vibe_distribution" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
+    acm_certificate_arn = data.aws_acm_certificate.issued.arn
+    ssl_support_method = "sni-only"
+    minimum_protocol_version = "TLSv1"
   }
+}
+
+# Find a certificate that is issued
+data "aws_acm_certificate" "issued" {
+  domain   = "philemonnwanne.me"
+  statuses = ["ISSUED"]
 }
 
 locals {
@@ -133,7 +143,7 @@ locals {
   min_ttl                = 0
   default_ttl            = 86400
   max_ttl                = 31536000
-  origin_protocol_policy = "http-only"
+  origin_protocol_policy = "match-viewer"
 
   tags = {
     Owner       = "Capstone-Group02"
