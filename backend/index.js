@@ -33,7 +33,7 @@ app.use(cookieParser());
 
 // 👇️ specify origins to allow
 // const whitelist = [process.env.FRONTEND_URL, 'http://127.0.0.1:5173', 'http://example2.com'];
-const whitelist = ['http://127.0.0.1:5173', 'http://*.cloudfront.net', 'https://*.cloudfront.net', 'http://*.philemonnwanne.me', 'https://*.philemonnwanne.me'];
+const whitelist = ['https://frontend.philemonnwanne.me', 'http://frontend.philemonnwanne.me', 'http://127.0.0.1:5173', 'http://*.cloudfront.net', 'https://*.cloudfront.net', 'http://*.philemonnwanne.me', 'https://*.philemonnwanne.me'];
 
 // ✅ Enable pre-flight requests
 app.options('*', cors());
