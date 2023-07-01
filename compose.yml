@@ -3,13 +3,17 @@ version: "3.8"
 services:
   # Frontend Service
   frontend:
-    build: ./frontend
     # image: imageName
+    # build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: ./dockerfile.local
     container_name: ${APP_NAME}-frontend
     environment:
-      REACT_APP_BACKEND_URL: "${LOCAL_BACKEND_URL}"
+      VITE_BACKEND_URL: "${VITE_BACKEND_URL}"
     healthcheck:
       test: curl -so /dev/null http://localhost/ || exit 1
+      # test: npm --version || exit 1
       interval: 30s
       retries: 5
       start_period: 5s
@@ -22,33 +26,39 @@ services:
       - ./frontend:/frontend
       - /frontend/node_modules
 
+# Docker Networks
+networks:
+  vacationvibe-network:
+    driver: bridge
+
   # Backend Service
-  backend:
-    build: ./backend
-    # image: imageName
-    container_name: ${APP_NAME}-backend
-    environment:
-      FRONTEND_URL: "${LOCAL_FRONTEND_URL}"
-      BACKEND_URL: "${LOCAL_BACKEND_URL}"
-      AWS_ACCESS_KEY: "${AWS_ACCESS_KEY_ID}"
-      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-      AWS_REGION: "${AWS_REGION}"
-      JWT_TOKEN: "${JWT_TOKEN}"
-      S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
-      MONGO_URL: "${LOCAL_MONGO_URL}"
-    healthcheck:
-      test: npm --version || exit 1
-      interval: 30s
-      retries: 5
-      start_period: 5s
-      timeout: 10s
-    networks:
-      - ${APP_NAME}-network
-    ports:
-      - "4000:4000"
-    volumes:
-      - ./backend:/backend
-      - /backend/node_modules
+  # backend:
+  #   build: ./backend
+  #   # image: imageName
+  #   container_name: ${APP_NAME}-backend
+  #   environment:
+  #     FRONTEND_URL: "${LOCAL_FRONTEND_URL}"
+  #     BACKEND_URL: "${LOCAL_BACKEND_URL}"
+  #     AWS_ACCESS_KEY: "${AWS_ACCESS_KEY_ID}"
+  #     AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+  #     AWS_REGION: "${AWS_REGION}"
+  #     JWT_TOKEN: "${JWT_TOKEN}"
+  #     S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
+  #     # MONGO_URL: "${LOCAL_MONGO_URL}"
+  #     MONGO_URL: "${MONGO_URL}"
+  #   healthcheck:
+  #     test: npm --version || exit 1
+  #     interval: 30s
+  #     retries: 5
+  #     start_period: 5s
+  #     timeout: 10s
+  #   networks:
+  #     - ${APP_NAME}-network
+  #   ports:
+  #     - "4000:4000"
+  #   volumes:
+  #     - ./backend:/backend
+  #     - /backend/node_modules
     
 # Database Service [Mongo]
   # mongodb:
@@ -79,12 +89,8 @@ services:
   #     - 8081:8081
   #   restart: always
 
-# Docker Networks
-networks:
-  vacationvibe-network:
-    driver: bridge
 
 # Docker Volumes
-volumes:
-  mongodb_data:
-    driver: local
+# volumes:
+#   mongodb_data:
+#     driver: local

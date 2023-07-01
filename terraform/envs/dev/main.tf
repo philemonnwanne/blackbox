@@ -33,7 +33,7 @@ module "ecs" {
 module "cloudfront" {
   source = "../../modules/cloudfront"
 
-  domain_name = module.alb.alb_dns
+  # domain_name = module.alb.alb_dns
 }
 
 module "route53" {
