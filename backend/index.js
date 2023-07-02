@@ -32,11 +32,10 @@ app.use(cookieParser());
 // });
 
 // 👇️ specify origins to allow
-// const whitelist = [process.env.FRONTEND_URL, 'http://127.0.0.1:5173', 'http://example2.com'];
-const whitelist = ['https://frontend.philemonnwanne.me', 'https://frontend.philemonnwanne.me/*', 'http://frontend.philemonnwanne.me', 'http://127.0.0.1:5173', 'http://*.cloudfront.net', 'https://*.cloudfront.net', 'http://*.philemonnwanne.me', 'https://*.philemonnwanne.me'];
+const whitelist = ['https://frontend.philemonnwanne.me', '${process.env}', 'http://127.0.0.1:5173'];
 
 // ✅ Enable pre-flight requests
-app.options('*', cors());
+// app.options('*', cors());
 
 const corsOptions = {
   credentials: true,
@@ -50,13 +49,6 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
-
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: process.env.FRONTEND_URL,
-//   })
-// );
 
 async function uploadToS3(path, originalFilename, mimetype) {
   const client = new S3Client({
