@@ -8,4 +8,4 @@
 - Disable password logins for ssh
 - Adjust my `AllowUsers` setting in sshd_config to only allow my user
 - Disable root logins
-- For servers with sensitive data, I install `fail2ban`
+- For servers with sensitive data, I install `fail2ban` 🚫
