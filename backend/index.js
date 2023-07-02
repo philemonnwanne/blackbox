@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // 👇️ specify origins to allow
-const whitelist = ['https://frontend.philemonnwanne.me', '${process.env}', 'http://127.0.0.1:5173'];
+const whitelist = ['https://frontend.philemonnwanne.me', 'http://127.0.0.1:5173'];
 
 // ✅ Enable pre-flight requests
 // app.options('*', cors());
