@@ -1,4 +1,4 @@
-# Here is a of ssh lockdown practices when I build a new server
+# Here is a of ssh lockdown practices when I build a new 🖥️
 
 ## Here is my list of ssh lockdown practices when I build a new server
 
