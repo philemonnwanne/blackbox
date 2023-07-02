@@ -29,6 +29,8 @@ By pinning the container version to a specific `SHA` you’re trading off “avo
 3.add env vars to github secrets for infracost workflow setup
 4.setup guardrails[cloud/guardrails/](https://www.infracost.io/docs/infracost_cloud/guardrails/)
 5.setup cost policies[cost_policies/](https://www.infracost.io/docs/features/cost_policies/) e.g. "talk to John in FinOps for advice"
+6.setup multiple environments for `dev`, `stage` & `production`. The `staging` and `production` environments will utilize different VPCs and possible there might be a management VPC to access either of the two.
+7. Perform infrastructure testing such as `unit`, `integration` and `end2end` tests.
 
 ### We will also simulate the above nos. 2,4,5 during our final defence
 
