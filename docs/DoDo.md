@@ -32,3 +32,6 @@ By pinning the container version to a specific `SHA` you’re trading off “avo
 
 ### We will also simulate the above nos. 2,4,5 during our final defence
 
+### We implemented RBAC
+
+This is just a way of restricting network access based on a person's role within an organization.
