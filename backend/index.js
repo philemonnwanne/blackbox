@@ -25,12 +25,6 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URL); // update to match the domain you will make the request from
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
-
 // 👇️ specify origins to allow
 const whitelist = ['https://frontend.philemonnwanne.me', '${process.env}', 'http://127.0.0.1:5173'];
 
