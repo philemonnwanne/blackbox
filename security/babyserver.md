@@ -10,6 +10,8 @@
 - Disable root logins
 - For servers with sensitive data, I install `fail2ban` 🚫
 
+`Note:` You can decide wether to use the deafult ssh port or not while taking note of the tradeoffs
+
 Paranoid syssdmins can make use of [port knocking](https://wiki.archlinux.org/title/Port_knocking), installing and configuring nftables or iptables is necessary to achieve this.
 
 A session with port knocking may look like this:
