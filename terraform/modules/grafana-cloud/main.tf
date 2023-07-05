@@ -8,21 +8,6 @@ terraform {
   required_version = ">= 1.1.0"
 }
 
-variable "external_id" {
-  type        = string
-  description = "This is your Grafana Cloud identifier and is used for security purposes."
-  validation {
-    condition     = length(var.external_id) > 0
-    error_message = "ExternalID is required."
-  }
-}
-
-variable "iam_role_name" {
-  type        = string
-  default     = "GrafanaLabsCloudWatchIntegration"
-  description = "Customize the name of the IAM role used by Grafana for the CloudWatch integration."
-}
-
 data "aws_iam_policy_document" "trust_grafana" {
   statement {
     effect = "Allow"
@@ -73,11 +58,6 @@ resource "aws_iam_role" "grafana_labs_cloudwatch_integration" {
       ]
     })
   }
-}
-
-output "role_arn" {
-  value       = aws_iam_role.grafana_labs_cloudwatch_integration.arn
-  description = "The ARN for the role created, copy this into Grafana Cloud installation."
 }
 
 locals {
