@@ -8,6 +8,10 @@ module "security" {
   vpc_id = module.vpc.vpc_id
 }
 
+module "grafana-cloud" {
+  source = "../../modules/grafana-cloud"
+}
+
 module "ecs" {
   source = "../../modules/ecs"
 
