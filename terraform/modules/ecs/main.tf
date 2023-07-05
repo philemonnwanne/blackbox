@@ -7,6 +7,7 @@ resource "aws_ecs_cluster" "vacation-vibe" {
 }
 
 resource "aws_ecs_task_definition" "backend" {
+  tags   = local.tags
   family             = "${var.task_name}"
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
@@ -185,6 +186,7 @@ resource "aws_iam_role_policy_attachment" "task_role_policy_attachment" {
 # }
 
 resource "aws_ecs_service" "backend" {
+  tags   = local.tags
   name                 = "backend"
   task_definition      = aws_ecs_task_definition.backend.arn
   cluster              = "${aws_ecs_cluster.vacation-vibe.id}"
@@ -253,6 +255,12 @@ resource "aws_ecs_service" "backend" {
 locals {
   protocol = "tcp"
   app_protocol = "http"
+
+  tags = {
+  Owner       = "Capstone-Group02"
+  Track       = "Cloud/DevOps"
+  Environment = "Prod"
+}
 }
 
 # Will use this later, why? I don't remember, sha stay here mr/mrs resource

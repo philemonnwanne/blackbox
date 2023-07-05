@@ -49,11 +49,10 @@ resource "aws_iam_role" "grafana_labs_cloudwatch_integration" {
   inline_policy {
     name = var.iam_role_name
     policy = jsonencode({
-      Version = "2012-10-17"
-      Statement = [
+      "Version" : "2012-10-17",
+      "Statement" : [
         {
-          Effect = "Allow"
-          Action = [
+          "Action" : [
             "tag:GetResources",
             "cloudwatch:GetMetricData",
             "cloudwatch:ListMetrics",
@@ -64,10 +63,12 @@ resource "aws_iam_role" "grafana_labs_cloudwatch_integration" {
             "dms:DescribeReplicationTasks",
             "ec2:DescribeTransitGatewayAttachments",
             "ec2:DescribeSpotFleetRequests",
+            "shield:ListProtections",
             "storagegateway:ListGateways",
             "storagegateway:ListTagsForResource"
-          ]
-          Resource = "*"
+          ],
+          "Effect" : "Allow",
+          "Resource" : "*"
         }
       ]
     })

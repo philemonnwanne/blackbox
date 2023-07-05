@@ -49,6 +49,7 @@ resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
 }
 
 resource "aws_cloudfront_distribution" "vacation_vibe_distribution" {
+  tags   = local.tags
   # is_ipv6_enabled     = true
   enabled             = true
   comment             = "production distribution for vacation-vibe"
