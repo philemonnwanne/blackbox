@@ -4,6 +4,9 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.49.0"
     }
+    mongodbatlas = {
+      source = "mongodb/mongodbatlas"
+    }
     random = {
       source  = "hashicorp/random"
       version = ">= 2.0"
@@ -22,4 +25,14 @@ terraform {
     }
   }
   required_version = ">= 1.1.0"
+}
+
+# Define the MongoDB Atlas Provider
+terraform {
+  required_providers {
+    mongodbatlas = {
+      source = "mongodb/mongodbatlas"
+    }
+  }
+  required_version = ">= 0.13"
 }
