@@ -5,7 +5,7 @@ variable "external_id" {
     condition     = length(var.external_id) > 0
     error_message = "ExternalID is required."
   }
-  default = ""
+  default = "1234"
 }
 
 variable "iam_role_name" {
