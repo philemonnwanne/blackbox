@@ -23,7 +23,3 @@ output "user_password" {
   sensitive   = true
   value       = mongodbatlas_database_user.db-user.password
 }
-
-output "privatelink_connection_string" {
-  value = lookup(mongodbatlas_advanced_cluster.atlas-cluster.connection_strings[0].aws_private_link_srv, aws_vpc_endpoint.ptfe_service.id)
-}

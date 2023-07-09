@@ -1,12 +1,7 @@
 variable "atlas_org_id" {
   type        = string
   description = "Atlas Organization ID"
-  default = "649a327d2277c80c223a0cd8"
-}
-
-variable "vpc_id" {
-  type        = string
-  description = "ID of the VPC"
+  default = "****************"
 }
 
 variable "aws_region" {
@@ -25,16 +20,6 @@ variable "environment" {
   type        = string
   description = "The environment to be built [dev/stage/prod]"
   default = "dev"
-}
-
-variable "subnet_ids" {
-  type        = list(string)
-  description = "ID of the subnets"
-}
-
-variable "security_group_ids" {
-  type        = set(string)
-  description = "ID of the security group"
 }
 
 variable "cluster_instance_size_name" {

@@ -62,8 +62,4 @@ module "vpc" {
 
 module "mogodb" {
   source = "../../modules/mongodb"
-
-  vpc_id = module.vpc.vpc_id
-  security_group_ids = [module.vpc.vpc_security_group_id,]
-  subnet_ids = [module.vpc.vpc_public_subnet_id[0], module.vpc.vpc_private_subnet_id[0]]
 }
