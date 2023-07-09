@@ -57,3 +57,13 @@ variable "ip_address" {
   type = string
   description = "IP address used to access Atlas cluster"
 }
+
+variable "mongodbatlas_public_key" {
+  type = string
+  description = "IP address used to access Atlas cluster"
+}
+
+variable "mongodbatlas_private_key" {
+  type = string
+  description = "IP address used to access Atlas cluster"
+}

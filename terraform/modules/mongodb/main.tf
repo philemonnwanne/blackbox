@@ -1,3 +1,13 @@
+# define the MongoDB Atlas provider
+terraform {
+  required_providers {
+    mongodbatlas = {
+      source = "mongodb/mongodbatlas"
+    }
+  }
+  required_version = ">= 0.13"
+}
+
 # create a project
 resource "mongodbatlas_project" "atlas-project" {
   org_id = var.atlas_org_id

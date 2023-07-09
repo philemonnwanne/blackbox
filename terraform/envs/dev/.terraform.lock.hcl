@@ -23,3 +23,43 @@ provider "registry.terraform.io/hashicorp/aws" {
     "zh:f77dfe665fd4b3d9e36fdc989d7feff4cf6bf17161c0b1a0f25a0fcf402c779d",
   ]
 }
+
+provider "registry.terraform.io/hashicorp/random" {
+  version = "3.5.1"
+  hashes = [
+    "h1:IL9mSatmwov+e0+++YX2V6uel+dV6bn+fC/cnGDK3Ck=",
+    "zh:04e3fbd610cb52c1017d282531364b9c53ef72b6bc533acb2a90671957324a64",
+    "zh:119197103301ebaf7efb91df8f0b6e0dd31e6ff943d231af35ee1831c599188d",
+    "zh:4d2b219d09abf3b1bb4df93d399ed156cadd61f44ad3baf5cf2954df2fba0831",
+    "zh:6130bdde527587bbe2dcaa7150363e96dbc5250ea20154176d82bc69df5d4ce3",
+    "zh:6cc326cd4000f724d3086ee05587e7710f032f94fc9af35e96a386a1c6f2214f",
+    "zh:78d5eefdd9e494defcb3c68d282b8f96630502cac21d1ea161f53cfe9bb483b3",
+    "zh:b6d88e1d28cf2dfa24e9fdcc3efc77adcdc1c3c3b5c7ce503a423efbdd6de57b",
+    "zh:ba74c592622ecbcef9dc2a4d81ed321c4e44cddf7da799faa324da9bf52a22b2",
+    "zh:c7c5cde98fe4ef1143bd1b3ec5dc04baf0d4cc3ca2c5c7d40d17c0e9b2076865",
+    "zh:dac4bad52c940cd0dfc27893507c1e92393846b024c5a9db159a93c534a3da03",
+    "zh:de8febe2a2acd9ac454b844a4106ed295ae9520ef54dc8ed2faf29f12716b602",
+    "zh:eab0d0495e7e711cca367f7d4df6e322e6c562fc52151ec931176115b83ed014",
+  ]
+}
+
+provider "registry.terraform.io/mongodb/mongodbatlas" {
+  version = "1.10.0"
+  hashes = [
+    "h1:J7ue/I/86zeY8cGVmEcyHQLrtVo1h9arcdUezO3MVSM=",
+    "zh:023b29d2b2f7d0a6d2c246d9ee4b1701cc6cfd78042d4cec4f2048014dade19c",
+    "zh:13c9c9df28e49895eff81e5767043d70ba3243addd44ae78322ee38505a6672a",
+    "zh:2e267e2eb51f6080eed46cc1bde7bf4b6f2f5d9d705108420321ff658acac42f",
+    "zh:3ff969c2b923444245df8be17e21c419b7603cc3845d32efda23380e3c99b540",
+    "zh:4b6ed1ebefc0f6192a26059637164bb2789ac3b9540e4700339c307de9a01385",
+    "zh:524439607500c7b3aa26902eb69ba724b830696ff12910e136a6503a9f66675a",
+    "zh:61c5ee1d42cf7fb05304277ba5043bdb1f4555c81f0f7fe18a45e8475354f539",
+    "zh:65dde47f71f04e425951b956a867a2c3773e0855560d6f783a612a3703dd9136",
+    "zh:6e586e2d1954df4363eb659d46f0abb3c456267abc95e3a2978d0d648696a232",
+    "zh:77857d3fb6e9cfce94c39953e86d97ec28f4f05742d826ea42103cbeeb3345dd",
+    "zh:90b8ef3492f17b6c363f83464c38b4737c8fe15ba70bdc9ad753bade08ef2da7",
+    "zh:97b4d53d6485dd3cafcf1189558fc4105180468e946f79a05edffe0a4c1d7749",
+    "zh:d13afce7e28f4a204049ca7c1a8704852f6c3e9b72e8d243b36adab4992c4207",
+    "zh:d7c142096a9551a971627807b35ce95436f00630d1bc0b9cc1d19f65f5fa1bec",
+  ]
+}
