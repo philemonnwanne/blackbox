@@ -1,23 +1,6 @@
-# Create Cloudwatch Logs
+# Gaining Access to ECS Fargate Container
 
-We would want to have a general log for our cluster, and also set the retention period to 1 day
-
-```bash
-aws logs create-log-group --log-group-name "vacation-vibe-fargate-cluster" \
-aws logs put-retention-policy --log-group-name "vacation-vibe-fargate-cluster" --retention-in-days 1
-```
-
-### Create Fargate Cluster
-
-```bash
-aws ecs create-cluster \
---cluster-name vacation-vibe \
---service-connect-defaults namespace=vacation-vibe
-```
-
-### Gaining Access to ECS Fargate Container
-
-### Login to ECR
+## Login to ECR
 
 > Always do this before pushing to ECR
 
