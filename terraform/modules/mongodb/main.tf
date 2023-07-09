@@ -46,6 +46,7 @@ resource "mongodbatlas_advanced_cluster" "atlas-cluster" {
   cluster_type = "REPLICASET"
   backup_enabled = true
   mongo_db_major_version = var.mongodb_version
+  termination_protection_enabled = false // only set to true in prod
   replication_specs {
     region_configs {
       electable_specs {
