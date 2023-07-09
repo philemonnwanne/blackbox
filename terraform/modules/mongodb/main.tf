@@ -36,7 +36,9 @@ resource "random_password" "db-user-password" {
 # create database IP access list 
 resource "mongodbatlas_project_ip_access_list" "ip" {
   project_id = mongodbatlas_project.atlas-project.id
-  ip_address = var.ip_address
+  # ip_address = var.ip_address // enable only in prod if necessary
+  cidr_block = var.cidr_block
+  comment    = "cidr block for tf acc testing"
 }
 
 # create an Atlas advanced cluster 

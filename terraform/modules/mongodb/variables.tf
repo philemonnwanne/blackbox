@@ -1,7 +1,7 @@
 variable "atlas_org_id" {
   type        = string
   description = "Atlas Organization ID"
-  default = "capstone-group2"
+  default = "649a327d2277c80c223a0cd8"
 }
 
 variable "vpc_id" {
@@ -61,8 +61,14 @@ variable "mongodb_version" {
   default = "6.0"
 }
 
-variable "ip_address" {
+# variable "ip_address" {
+#   type = string
+#   description = "IP address used to access Atlas cluster"
+#   default = ""
+# }
+
+variable "cidr_block" {
   type = string
-  description = "IP address used to access Atlas cluster"
-  default = "0.0.0.0"
+  description = "cidr block used to access Atlas cluster"
+  default = "0.0.0.0/1"
 }
