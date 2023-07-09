@@ -60,6 +60,6 @@ module "vpc" {
 #   source = "../../global/statefile"
 # }
 
-module "mogodb" {
-  source = "../../modules/mongodb"
-}
+# module "mogodb" {
+#   source = "../../modules/mongodb"
+# }
