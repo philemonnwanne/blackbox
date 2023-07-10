@@ -25,24 +25,21 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-// 👇️ specify origins to allow
-const whitelist = ['https://frontend.philemonnwanne.me', 'http://127.0.0.1:5173'];
-
-// ✅ Enable pre-flight requests
-// app.options('*', cors());
-
-const corsOptions = {
-  credentials: true,
-  origin: (origin, callback) => {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-}
-
-app.use(cors(corsOptions));
+app.use(function (req, res, next) {
+  res.header(
+    "Access-Control-Allow-Origin",
+    "http://127.0.0.1:5173"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Credentials",
+    "true"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 async function uploadToS3(path, originalFilename, mimetype) {
   const client = new S3Client({
