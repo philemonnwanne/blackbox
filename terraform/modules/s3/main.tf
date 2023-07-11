@@ -2,7 +2,7 @@
 # BACKEND BUCKET
 # create an S3 bucket for our backend uploads
 resource "aws_s3_bucket" "backend" {
-  bucket        = var.bucket_name
+  bucket        = "tripvibe-${local.tags["Environment"]}-${var.bucket_name}"
   force_destroy = true
 
   tags = local.tags
@@ -31,7 +31,7 @@ resource "aws_s3_bucket_ownership_controls" "backend" {
 
 # create an S3 bucket for our static web site artifacts
 resource "aws_s3_bucket" "cloudfront" {
-  bucket = "tripvibe-cloudfront-${local.tags["Environment"]}-bucket"
+  bucket = "tripvibe-${local.tags["Environment"]}-cloudfront-bucket"
   tags   = local.tags
 }
 
