@@ -1,13 +1,18 @@
-variable "aws_region" {
-  description = "aws region"
-  type        = string
-  default     = "us-east-1"
-}
+# variable "aws_region" {
+#   description = "aws region"
+#   type        = string
+#   default     = "us-east-1"
+# }
 
 variable "domain_name" {
   description = "aws region"
   type        = string
   default = "backend.philemonnwanne.me"
+}
+
+variable "resources" {
+  description = "aws region"
+  type        = string
 }
 
 variable "allowed_methods" {

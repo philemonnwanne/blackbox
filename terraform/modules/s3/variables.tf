@@ -10,3 +10,7 @@ variable "bucket_name" {
   default     = "tripvibe"
 }
 
+variable "policy" {
+  description = "s3 bucket name"
+  type        = string
+}
