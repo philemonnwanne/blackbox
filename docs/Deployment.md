@@ -85,12 +85,12 @@ While in the root directory, create a .env file
 VITE_BACKEND_URL="http://127.0.0.1:4000/api"
 
 # BACKEND
-FRONTEND_URL=""
+FRONTEND_URL="http://127.0.0.1:5173"
 S3_BUCKET_NAME=""
 AWS_REGION=""
 AWS_ACCESS_KEY_ID=""
 AWS_SECRET_ACCESS_KEY=""
-MONGO_URL=""
+MONGO_URL="mongodb://127.0.0.1:27017"
 JWT_TOKEN=""
 
 # DATABASE
