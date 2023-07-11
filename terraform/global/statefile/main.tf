@@ -1,20 +1,3 @@
-# this file defines the terraform block, which Terraform uses to configures itself
-
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.49.0"
-    }
-  }
-  required_version = ">= 1.1.0"
-}
-
-# this block configures the AWS provider
-provider "aws" {
-  region = local.region
-}
-
 resource "aws_s3_bucket" "vacation_vibe_state" {
   bucket = "vacation-vibe-state-${local.environment}"
   object_lock_enabled = true
