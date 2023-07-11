@@ -11,7 +11,7 @@ module "alb" {
 module "cloudfront" {
   source = "../../modules/cloudfront"
 
-  resources = module.s3.vacation_vibe_cloudfront_s3_arn
+  resources = "${module.s3.vacation_vibe_cloudfront_s3_ar}/*"
 }
 
 module "ecs" {
