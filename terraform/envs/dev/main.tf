@@ -28,15 +28,15 @@ module "grafana-cloud" {
   source = "../../modules/grafana-cloud"
 }
 
-# terraform {
-#   backend "s3" {
-#     # Replace this with your bucket name!
-#     bucket    = "vacationvibe-state-dev"
-#     key       = "dev/terraform.tfstate"
-#     region    = "us-east-1"
-#     encrypt   = true
-#   }
-# }
+terraform {
+  backend "s3" {
+    # Replace this with your bucket name!
+    bucket = module.state.tripvibe_state_bucket
+    key       = var.key
+    region    = var.region
+    encrypt   = true
+  }
+}
 
 module "route53" {
   source = "../../modules/route53"
@@ -56,10 +56,10 @@ module "vpc" {
   source = "../../modules/vpc"
 }
 
-# module "state" {
-#   source = "../../global/statefile"
-# }
+module "state" {
+  source = "../../global/statefile"
+}
 
-# module "mogodb" {
-#   source = "../../modules/mongodb"
-# }
+module "s3" {
+  source = "../../modules/s3"
+}
