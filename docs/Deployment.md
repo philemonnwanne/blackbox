@@ -62,7 +62,7 @@ npm start dev
 
 ## Start the Frontend Client
 
-Create a `.env` file in the `frontend` folder and provide the follwoing environment variable.
+Create a `.env` file in the `frontend` folder and provide the following environment variable.
 
 ```env
 VITE_BACKEND_URL="http://127.0.0.1:4000/api"
