@@ -74,7 +74,7 @@ Then run
 npm run dev
 ```
 
-Now, you can access the tripvibe app by opening your browser and visiting `http://localhost:4000`
+Now, you can access the tripvibe app by opening your browser and visiting `http://localhost:5173`
 
 # Deploy with Docker-Compose 🐬
 
