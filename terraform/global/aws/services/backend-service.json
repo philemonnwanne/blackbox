@@ -1,5 +1,5 @@
 {
-    "cluster": "cruddur",
+    "cluster": "tripvibe",
     "launchType": "FARGATE",
     "desiredCount": 1,
     "enableECSManagedTags": true,
@@ -18,22 +18,22 @@
       }
     },
     "propagateTags": "SERVICE",
-    "serviceName": "backend-flask",
-    "taskDefinition": "backend-flask",
+    "serviceName": "backend",
+    "taskDefinition": "backend",
     "loadBalancers": [
       {
           "targetGroupArn": "<backend-targetGroupArn>",
-          "containerName": "backend-flask",
+          "containerName": "backend",
           "containerPort": 4567
       }
     ],
     "serviceConnectConfiguration": {
       "enabled": true,
-      "namespace": "cruddur",
+      "namespace": "tripvibe",
       "services": [
         {
-          "portName": "backend-flask",
-          "discoveryName": "backend-flask",
+          "portName": "backend",
+          "discoveryName": "backend",
           "clientAliases": [{"port": 4567}]
         }
       ]

@@ -1,7 +1,7 @@
 {
     "family": "backend",
-    "executionRoleArn": "arn:aws:iam::183066416469:role/vacation-vibeServiceExecutionRole",
-    "taskRoleArn": "arn:aws:iam::183066416469:role/vacation-vibeTaskRole",
+    "executionRoleArn": "arn:aws:iam::183066416469:role/TripvibeServiceExecutionRole",
+    "taskRoleArn": "arn:aws:iam::183066416469:role/TripvibeTaskRole",
     "networkMode": "awsvpc",
     "cpu": "256",
     "memory": "512",
@@ -34,22 +34,22 @@
         "logConfiguration": {
           "logDriver": "awslogs",
           "options": {
-              "awslogs-group": "vacation-vibe-fargate-cluster",
+              "awslogs-group": "tripvibe-fargate-cluster",
               "awslogs-region": "us-east-1",
               "awslogs-stream-prefix": "backend"
           }
         },
         "environment": [
-          {"name": "S3_BUCKET_NAME", "value": "vacation-vibe"},
+          {"name": "S3_BUCKET_NAME", "value": "tripvibe"},
           {"name": "FRONTEND_URL", "value": "*"},
           {"name": "BACKEND_URL", "value": "*"},
           {"name": "AWS_REGION", "value": "us-east-1"}
         ],
         "secrets": [
-          {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/AWS_ACCESS_KEY_ID"},
-          {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY"},
-          {"name": "MONGO_URL"       , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/MONGO_URL" },
-          {"name": "JWT_TOKEN" , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/JWT_TOKEN" }
+          {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/tripvibe/backend/AWS_ACCESS_KEY_ID"},
+          {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/tripvibe/backend/AWS_SECRET_ACCESS_KEY"},
+          {"name": "MONGO_URL"       , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/tripvibe/backend/MONGO_URL" },
+          {"name": "JWT_TOKEN" , "valueFrom": "arn:aws:ssm:us-east-1:183066416469:parameter/tripvibe/backend/JWT_TOKEN" }
         ]
       }
     ]

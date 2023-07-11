@@ -32,15 +32,15 @@ module "ecs" {
 #   source = "../../modules/grafana-cloud"
 # }
 
-terraform {
-  backend "s3" {
-    # Replace this with your bucket name!
-    bucket = "tripvibe-state-dev"
-    region       = "us-east-1"
-    key    = "dev/terraform.tfstate"
-    encrypt   = true
-  }
-}
+# terraform {
+#   backend "s3" {
+#     # Replace this with your bucket name!
+#     bucket = "tripvibe-state-dev"
+#     region       = "us-east-1"
+#     key    = "dev/terraform.tfstate"
+#     encrypt   = true
+#   }
+# }
 
 # remote_state {
 #     backend = "s3"
