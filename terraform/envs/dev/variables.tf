@@ -5,7 +5,7 @@ variable "region" {
 }
 
 variable "key" {
-  description = "region to deploy all aws project resources"
+  description = "path to the state file inside the S3 bucket"
   type        = string
   default     = "dev/terraform.tfstate"
 }
