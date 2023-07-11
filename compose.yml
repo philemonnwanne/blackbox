@@ -1,5 +1,6 @@
 version: "3.8"
 
+# Tweak to your satisfaction
 services:
   # Frontend Service
   frontend:
@@ -26,39 +27,39 @@ services:
       - ./frontend:/frontend
       - /frontend/node_modules
 
+  # Backend Service
+  backend:
+    build: ./backend
+    # image: imageName
+    container_name: ${APP_NAME}-backend
+    environment:
+      FRONTEND_URL: "${LOCAL_FRONTEND_URL}"
+      BACKEND_URL: "${LOCAL_BACKEND_URL}"
+      AWS_ACCESS_KEY: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "${AWS_REGION}"
+      JWT_TOKEN: "${JWT_TOKEN}"
+      S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
+      # MONGO_URL: "${LOCAL_MONGO_URL}"
+      MONGO_URL: "${MONGO_URL}"
+    healthcheck:
+      test: npm --version || exit 1
+      interval: 30s
+      retries: 5
+      start_period: 5s
+      timeout: 10s
+    networks:
+      - ${APP_NAME}-network
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:/backend
+      - /backend/node_modules
+
 # Docker Networks
 networks:
   vacationvibe-network:
     driver: bridge
-
-  # Backend Service
-  # backend:
-  #   build: ./backend
-  #   # image: imageName
-  #   container_name: ${APP_NAME}-backend
-  #   environment:
-  #     FRONTEND_URL: "${LOCAL_FRONTEND_URL}"
-  #     BACKEND_URL: "${LOCAL_BACKEND_URL}"
-  #     AWS_ACCESS_KEY: "${AWS_ACCESS_KEY_ID}"
-  #     AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-  #     AWS_REGION: "${AWS_REGION}"
-  #     JWT_TOKEN: "${JWT_TOKEN}"
-  #     S3_BUCKET_NAME: "${S3_BUCKET_NAME}"
-  #     # MONGO_URL: "${LOCAL_MONGO_URL}"
-  #     MONGO_URL: "${MONGO_URL}"
-  #   healthcheck:
-  #     test: npm --version || exit 1
-  #     interval: 30s
-  #     retries: 5
-  #     start_period: 5s
-  #     timeout: 10s
-  #   networks:
-  #     - ${APP_NAME}-network
-  #   ports:
-  #     - "4000:4000"
-  #   volumes:
-  #     - ./backend:/backend
-  #     - /backend/node_modules
     
 # Database Service [Mongo]
   # mongodb:
@@ -88,7 +89,6 @@ networks:
   #   ports:
   #     - 8081:8081
   #   restart: always
-
 
 # Docker Volumes
 # volumes:

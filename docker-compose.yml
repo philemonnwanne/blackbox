@@ -56,9 +56,9 @@ networks:
     driver: bridge
 
 # Docker Volumes
-volumes:
-  mongodb_data:
-    driver: local
+# volumes:
+#   mongodb_data:
+#     driver: local
 
 # Database Service [Mongo]
   # mongodb:
