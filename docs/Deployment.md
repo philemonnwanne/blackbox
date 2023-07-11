@@ -9,7 +9,7 @@
   - Disable `Block all public access` settings
   - Then click on `Create bucket`
 
-Please note that this code was written for Terraform 1.x.
+Please note that this code was written for Terraform 1.4.x
 
 ## Deploy App Locally 👨🏾‍💻
 
