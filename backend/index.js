@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
-  res.header(
+  res.setHeader(
     "Access-Control-Allow-Origin",
     "https://frontend.philemonnwanne.me"
   );
@@ -38,7 +38,7 @@ app.use(function (req, res, next) {
     "Access-Control-Allow-Methods",
     "POST, PUT, GET, OPTIONS"
   );
-  res.header(
+  res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
