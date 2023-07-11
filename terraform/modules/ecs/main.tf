@@ -1,4 +1,4 @@
-resource "aws_ecs_cluster" "vacation-vibe" {
+resource "aws_ecs_cluster" "tripvibe" {
   name = "${var.cluster_name}"
   setting {
     name = "containerInsights"
@@ -90,11 +90,11 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "task_execution_role" {
-  name               = "Vacation-vibeTaskExecutionRole"
+  name               = "TripvibeTaskExecutionRole"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 # resource "aws_iam_role" "task_role" {
-#   name               = "Vacation-VibeTaskRole"
+#   name               = "TripvibeTaskRole"
 #   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 # }
 # ------------------------- Step 1
@@ -118,13 +118,13 @@ data "aws_iam_policy_document" "task_execution_policy" {
       "ssm:GetParameter",
       "ssm:GetParameters"
     ]
-    resources = ["arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/*"]
+    resources = ["arn:aws:ssm:us-east-1:183066416469:parameter/tripvibe/backend/*"]
   }
 }
 # --------------------- Step 2
 # link policy document to `aws_iam_policy` resource
 resource "aws_iam_policy" "task_execution_policy" {
-   name        = "vacation-vibe-task-execution-policy"
+   name        = "tripvibe-task-execution-policy"
    description = ""
    policy      = data.aws_iam_policy_document.task_execution_policy.json
 }
@@ -140,7 +140,7 @@ resource "aws_iam_role_policy_attachment" "task_execution_role_policy_attachment
 # -------------------------
 
 resource "aws_iam_role" "task_role" {
-  name               = "Vacation-vibeTaskRole"
+  name               = "TripvibeTaskRole"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 # ------------------------- Step 1
@@ -160,7 +160,7 @@ data "aws_iam_policy_document" "task_policy" {
 # --------------------- Step 2
 # link policy documentt to `aws_iam_policy` resource
 resource "aws_iam_policy" "task_policy" {
-   name        = "vacation-vibe-task-policy"
+   name        = "tripvibe-task-policy"
    description = ""
    policy      = data.aws_iam_policy_document.task_policy.json
 }
@@ -189,7 +189,7 @@ resource "aws_ecs_service" "backend" {
   tags   = local.tags
   name                 = "backend"
   task_definition      = aws_ecs_task_definition.backend.arn
-  cluster              = "${aws_ecs_cluster.vacation-vibe.id}"
+  cluster              = "${aws_ecs_cluster.tripvibe.id}"
   launch_type          = "FARGATE"
   desired_count        = 1
   # depends_on      = [aws_iam_role_policy.foo] #To prevent a race condition during service deletion, we may not need tthis
@@ -259,7 +259,7 @@ locals {
   tags = {
   Owner       = "Capstone-Group02"
   Track       = "Cloud/DevOps"
-  Environment = "Prod"
+  Environment = "dev"
 }
 }
 
