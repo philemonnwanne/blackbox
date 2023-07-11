@@ -112,6 +112,14 @@ docker-compose up
 Navigate to the `terraform/env/dev` directory then run 
 
 ```sh
+terraform init
+```
+
+This will install the necessary modules/providers/plugins
+
+After a successful init command, run
+
+```sh
 terraform plan
 ```
 
