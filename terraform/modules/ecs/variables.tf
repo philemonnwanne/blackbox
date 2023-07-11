@@ -82,10 +82,10 @@ variable "environment" {
   default = ""
 }
 
-# variable "container_name" {
-#   description = "the containers name"
-#   type = any
-# }
+variable "s3_bucket" {
+  description = "the s3 backend bucket"
+  type = string
+}
 
 variable "target_group_arn" {
   description = "arn of the target group"

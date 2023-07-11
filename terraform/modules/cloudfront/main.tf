@@ -3,7 +3,7 @@ data "aws_iam_policy_document" "tripvibe_s3_policy" {
   statement {
     actions   = var.actions
     resources = var.resources
-    # resources = ["${aws_s3_bucket.tripvibe_cloudfront.arn}/*"]
+    # resources = ["${aws_s3_bucket.cloudfront.arn}/*"]
     principals {
       type        = "AWS"
       identifiers = [aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn]

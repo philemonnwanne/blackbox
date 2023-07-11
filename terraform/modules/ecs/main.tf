@@ -40,7 +40,7 @@ resource "aws_ecs_task_definition" "backend" {
         }
         },
         "environment": [
-        { "name": "S3_BUCKET_NAME", "value": "${var.cluster_name}" },
+        { "name": "S3_BUCKET_NAME", "value": "${var.s3_bucket}" },
         { "name": "FRONTEND_URL", "value": "*" },
         { "name": "BACKEND_URL", "value": "*" },
         { "name": "AWS_REGION", "value": "${var.aws_region}" }

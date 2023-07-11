@@ -7,10 +7,10 @@ variable "object_ownership" {
 variable "bucket_name" {
   description = "s3 bucket name"
   type        = string
-  default     = "tripvibe-static"
+  default     = "tripvibe-static-files"
 }
 
 variable "policy" {
-  description = "s3 bucket name"
+  description = "s3 bucket policy"
   type        = string
 }
