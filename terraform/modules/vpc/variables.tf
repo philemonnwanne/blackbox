@@ -1,7 +1,7 @@
 variable "vpc_name" {
   description = "Name of VPC"
   type        = string
-  default     = "vacation-vibe"
+  default     = "tripvibe"
 }
 
 variable "cidr" {
@@ -25,7 +25,7 @@ variable "public_subnets" {
 variable "public_subnets_names" {
   description = "private subnet names for VPC"
   type        = list(string)
-  default     = ["vacation-vibe-subnet-public1-us-east-1a", "vacation-vibe-subnet-public2-us-east-1b"]
+  default     = ["tripvibe-subnet-public1-us-east-1a", "tripvibe-subnet-public2-us-east-1b"]
 }
 
 variable "private_subnets" {
@@ -37,7 +37,7 @@ variable "private_subnets" {
 variable "private_subnets_names" {
   description = "private subnet names for VPC"
   type        = list(string)
-  default     = ["vacation-vibe-subnet-private1-us-east-1a", "vacation-vibe-subnet-private2-us-east-1b"]
+  default     = ["tripvibe-subnet-private1-us-east-1a", "tripvibe-subnet-private2-us-east-1b"]
 }
 
 variable "tags" {
