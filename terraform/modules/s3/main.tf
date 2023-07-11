@@ -31,7 +31,7 @@ resource "aws_s3_bucket_ownership_controls" "backend" {
 
 # create an S3 bucket for our static web site artifacts
 resource "aws_s3_bucket" "cloudfront" {
-  bucket = "tripvibe-${local.tags["Environment"]}-bucket"
+  bucket = "tripvibe-cloudfront-${local.tags["Environment"]}-bucket"
   tags   = local.tags
 }
 
