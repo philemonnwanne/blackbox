@@ -58,13 +58,13 @@ variable "viewer_protocol_policy" {
 variable "s3_origin_id" {
   description = "unique identifier for the s3 bucket origin"
   type        = string
-  default     = "vacation-vibe-s3-origin"
+  default     = "tripvibe-s3-origin"
 }
 
 variable "alb_origin_id" {
   description = "unique identifier for the load balancer origin"
   type        = string
-  default     = "vacation-vibe-alb-origin"
+  default     = "tripvibe-alb-origin"
 }
 
 variable "environment" {
