@@ -28,7 +28,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
   }
 }
 
-# block all public access to the S3 bucket + extra layer of protection to ensure no one on your team can ever accidentally make this S3 bucket public
+# block all public access to the S3 bucket + extra layer of protection to ensure no one on the team can ever accidentally make this S3 bucket public
 resource "aws_s3_bucket_public_access_block" "public_access" {
   bucket                  = aws_s3_bucket.vacation_vibe_state.id
   block_public_acls       = true
