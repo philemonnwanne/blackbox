@@ -30,23 +30,23 @@ resource "aws_s3_bucket_ownership_controls" "backend" {
 # CLOUDFRONT BUCKET
 
 # create an S3 bucket for our static web site artifacts
-resource "aws_s3_bucket" "vacation_vibe_cloudfront" {
-  bucket = "vacation-vibe-${local.tags["Environment"]}-bucket"
+resource "aws_s3_bucket" "tripvibe_cloudfront" {
+  bucket = "tripvibe-${local.tags["Environment"]}-bucket"
   tags   = local.tags
 }
 
 # upload the content of the `build` folder as S3 objects
 resource "aws_s3_object" "bucket_upload" {
   for_each     = fileset("../../../frontend/dist", "**/*.*")
-  bucket       = aws_s3_bucket.vacation_vibe_cloudfront.id
+  bucket       = aws_s3_bucket.tripvibe_cloudfront.id
   key          = each.key
   source       = "../../../frontend/dist/${each.value}"
   etag         = filemd5("../../../frontend/dist/${each.value}")
   content_type = lookup(local.mime_types, regex("\\.[^.]+$", each.value), null)
 }
 
-resource "aws_s3_bucket_policy" "vacation_vibe_s3_bucket_policy" {
-  bucket = aws_s3_bucket.vacation_vibe_cloudfront.id
+resource "aws_s3_bucket_policy" "tripvibe_s3_bucket_policy" {
+  bucket = aws_s3_bucket.tripvibe_cloudfront.id
   policy = var.policy
 }
 # CLOUDFRONT BUCKET
