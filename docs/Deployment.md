@@ -35,7 +35,7 @@ cd tripvibe
 npm install
 ```
 
-Navigate to the `frontend` folder and run ➡️
+➡️ Navigate to the `frontend` folder and run
 
 ```sh
 npm install
@@ -45,7 +45,7 @@ npm install
 
 Create a `.env` file in the `backend` folder and provide the necessary environment variables. You can refer to the `.env.example` file for the required variables.
 
-```json
+```.env
 FRONTEND_URL=""
 S3_BUCKET_NAME=""
 AWS_REGION=""
