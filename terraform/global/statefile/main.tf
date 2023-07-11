@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "vacation_vibe_state" {
-  bucket = "vacation-vibe-state-${local.environment}"
+  bucket = tripvibe-state-local.tags["Environment"]
   object_lock_enabled = true
   # Prevent accidental deletion of this S3 bucket
   lifecycle {
@@ -38,12 +38,9 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
 }
 
 locals {
-  region = "us-east-1"
-  environment = "dev"
-
   tags = {
     Owner = "Capstone-Group02"
     Track = "Cloud/DevOps"
-    Environment = "Dev"
+    Environment = "dev"
   }
 }
