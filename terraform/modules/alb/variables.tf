@@ -37,24 +37,3 @@ variable "target_type" {
   type        = string
   default     = "ip"
 }
-
-# variable "backend_target" {
-#   description = "a map containing a key/value pair that define the backend target"
-#   type        = string
-# }
-
-# variable "target_02" {
-#   description = "a map containing a key/value pair that define the second target"
-#   type        = string
-# }
-
-# variable "target_03" {
-#   description = "a map containing a key/value pair that define the third target"
-#   type        = string
-# }
-
-# variable "ssl_cert" {
-#   description = "SSL certificate to apply to the HTTPS listener"
-#   type        = string
-#   default     = "arn:aws:acm:us-east-1:183066416469:certificate/cdc302d8-b3b0-46de-8ded-2f2e86fcae7c"
-# }
