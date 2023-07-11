@@ -27,7 +27,7 @@ Navigate to the project directory:
 cd tripvibe
 ```
 
-## Install the dependencies
+### Install the dependencies
 
 ⬅️ Navigate to the `backend` folder and run
 
@@ -41,7 +41,7 @@ npm install
 npm install
 ```
 
-## Start the Backend Server
+### Start the Backend Server
 
 Create a `.env` file in the `backend` folder and provide the necessary environment variables. You can refer to the `.env.example` file for the required variables.
 
@@ -60,7 +60,7 @@ Then run
 npm start dev
 ```
 
-## Start the Frontend Client
+### Start the Frontend Client
 
 Create a `.env` file in the `frontend` folder and provide the following environment variable.
 
@@ -76,7 +76,7 @@ npm run dev
 
 Now, you can access the tripvibe app by opening your browser and visiting `http://localhost:5173`
 
-# Deploy with Docker-Compose 🐬
+## Deploy with Docker-Compose 🐬
 
 While in the root directory, create a .env file
 
@@ -107,7 +107,7 @@ Then run
 docker-compose up
 ```
 
-# Deploy with Terraform 🐢
+## Deploy with Terraform 🐢
 
 Navigate to the `terraform/env/dev` directory then run 
 
