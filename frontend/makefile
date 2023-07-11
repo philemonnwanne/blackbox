@@ -1,5 +1,5 @@
 DOCKER_USERNAME ?= capgrp2
-APPLICATION_NAME ?= vacvibe-frontend
+APPLICATION_NAME ?= tripevibe-frontend
 GIT_HASH ?= $(shell git log --format="%h" -n 1)
  
 build:
