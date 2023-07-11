@@ -17,14 +17,14 @@ variable "ingress_cidr_blocks" {
 # }
 
 # variable "backend_ingress_with_cidr_blocks" {
-#   description = "access from the vacation-vibe ALB"
+#   description = "access from the tripvibe ALB"
 #   type        = list(map(string))
 #   default = [
 #     {
 #       from_port   = 4000
 #       to_port     = 4000
 #       protocol    = "tcp"
-#       description = "access from the vacation-vibe ALB"
+#       description = "access from the tripvibe ALB"
 #       cidr_blocks = "0.0.0.0/0"
 #       source_security_group_id = module.alb_security_group.security_group_id
 #     }

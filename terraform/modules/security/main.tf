@@ -14,7 +14,7 @@ module "backend_security_group" {
       from_port   = local.backend_port
       to_port     = local.backend_port
       protocol    = "${local.tcp_protocol}"
-      description = "access from the vacation-vibe ALB"
+      description = "access from the tripvibe ALB"
       cidr_blocks = local.all_ips
       source_security_group_id = module.alb_security_group.security_group_id
     }
