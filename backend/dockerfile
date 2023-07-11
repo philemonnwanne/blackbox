@@ -1,4 +1,4 @@
-FROM node:16.20.0-alpine3.18@sha256:f711d8a40d3515d7d44e344306382179fc8bfc4fe75f1a77b27a686a88649430
+FROM 183066416469.dkr.ecr.us-east-1.amazonaws.com/tripvibe-nodejs:3.11.3-alpine
 
 WORKDIR /backend
 
