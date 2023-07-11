@@ -1,9 +1,9 @@
 # policy to allow the CloudFront `oia` to access the objects in the bucket
-data "aws_iam_policy_document" "vacation_vibe_s3_policy" {
+data "aws_iam_policy_document" "tripvibe_s3_policy" {
   statement {
     actions   = var.actions
     resources = var.resources
-    # resources = ["${aws_s3_bucket.vacation_vibe_cloudfront.arn}/*"]
+    # resources = ["${aws_s3_bucket.tripvibe_cloudfront.arn}/*"]
     principals {
       type        = "AWS"
       identifiers = [aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn]
@@ -13,14 +13,14 @@ data "aws_iam_policy_document" "vacation_vibe_s3_policy" {
 
 # identity with which the S3 bucket is accessed
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = "cloudfront vacation-vibe origin-acess-identity"
+  comment = "cloudfront tripvibe origin-acess-identity"
 }
 
-resource "aws_cloudfront_distribution" "vacation_vibe_distribution" {
+resource "aws_cloudfront_distribution" "tripvibe_distribution" {
   tags   = local.tags
   # is_ipv6_enabled     = true
   enabled             = true
-  comment             = "production distribution for vacation-vibe"
+  comment             = "production distribution for tripvibe"
   default_root_object = "index.html"
   aliases = ["frontend.philemonnwanne.me"]
 
@@ -100,7 +100,7 @@ resource "aws_cloudfront_distribution" "vacation_vibe_distribution" {
 
 # Find a certificate that is issued
 data "aws_acm_certificate" "issued" {
-  domain   = "philemonnwanne.me"
+  domain   = var.domain
   statuses = ["ISSUED"]
 }
 

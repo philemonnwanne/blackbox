@@ -3,6 +3,11 @@
 #   type        = string
 #   default     = "us-east-1"
 # }
+variable "domain" {
+  description = "aws region"
+  type        = string
+  default = "philemonnwanne.me"
+}
 
 variable "backend_domain_name" {
   description = "aws region"
