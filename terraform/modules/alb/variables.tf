@@ -5,7 +5,7 @@ variable "alb_name" {
 }
 
 variable "vpc_id" {
-  description = "VPC default id"
+  description = "VPC id"
   type        = string
 }
 

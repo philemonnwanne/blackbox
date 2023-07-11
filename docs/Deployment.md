@@ -3,6 +3,13 @@
 - You must have Terraform installed on your computer
 - You must have an Amazon Web Services (AWS) account
 - You must exported your AWS credentials
+
+```sh
+export AWS_REGION=(your aws region)
+export AWS_ACCESS_KEY_ID=(your access key id)
+export AWS_SECRET_ACCESS_KEY=(your secret access key)
+```
+
 - Create an s3 bucket
   - Click on Object Ownership and set it to `
     Bucket owner preferred`
@@ -109,17 +116,24 @@ docker-compose up
 
 ## Deploy with Terraform 🐢
 
+*Please note that this example will deploy real resources into your AWS account. We have made every effort to ensure all the resources qualify for the AWS Free Tier, but we are not responsible for any charges you may incur.*
+
+### Required varibles
+
+```python
+grafana
+domain name
+grafana_account_id
+external_id
+aws_acm_certificate
+```
+
+Navigate to the frontend directory and run `npm run build` to generate a build folder, which terraform will upload its contents to your s3 bucket
+
 Navigate to the `terraform/env/dev` directory then run 
 
 ```sh
 terraform init
-```
-
-This will install the necessary modules/providers/plugins
-
-After a successful init command, run
-
-```sh
 terraform plan
 ```
 
@@ -129,4 +143,8 @@ Once you have confirmed that you're good with the proposed changes, run
 terraform apply
 ```
 
-Then click `yes` to allow terraform make the desired changes to your infrastructure.
+Clean up when you're done:
+
+```sh
+terraform destroy
+```
