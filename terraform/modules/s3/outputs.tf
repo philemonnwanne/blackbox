@@ -33,5 +33,10 @@ output "vacation_vibe_cloudfront_s3_bucket_name" {
   value       = aws_s3_bucket.vacation_vibe_cloudfront.bucket
   description = "the id of the S3 bucket"
 }
+
+output "vacation_vibe_cloudfront_s3_domain_name" {
+  value       = aws_s3_bucket.vacation_vibe_cloudfront.bucket_regional_domain_name
+  description = "the id of the S3 bucket"
+}
 # CLOUDFRONT BUCKET
 # ===============-========================

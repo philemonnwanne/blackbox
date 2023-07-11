@@ -4,15 +4,20 @@
 #   default     = "us-east-1"
 # }
 
-variable "domain_name" {
+variable "backend_domain_name" {
   description = "aws region"
   type        = string
   default = "backend.philemonnwanne.me"
 }
 
-variable "resources" {
+variable "s3_domain_name" {
   description = "aws region"
   type        = string
+}
+
+variable "resources" {
+  description = "aws region"
+  type        = set(string)
 }
 
 variable "allowed_methods" {

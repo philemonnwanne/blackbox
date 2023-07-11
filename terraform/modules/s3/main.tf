@@ -27,7 +27,7 @@ resource "aws_s3_bucket_ownership_controls" "backend" {
 
 # create an S3 bucket for our static web site artifacts
 resource "aws_s3_bucket" "vacation_vibe_cloudfront" {
-  bucket = "vacation-vibe-${local.environment}-bucket"
+  bucket = "vacation-vibe-${local.tags["Environment"]}-bucket"
   tags   = local.tags
 }
 
@@ -49,10 +49,11 @@ resource "aws_s3_bucket_policy" "vacation_vibe_s3_bucket_policy" {
 # ===============-========================
 
 locals {
+  mime_types = jsondecode(file("${path.module}/mime.json"))
 
   tags = {
     Owner       = "Capstone-Group02"
     Track       = "Cloud/DevOps"
-    Environment = "Dev"
+    Environment = "dev"
   }
 }

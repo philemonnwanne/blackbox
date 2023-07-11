@@ -25,8 +25,9 @@ resource "aws_cloudfront_distribution" "vacation_vibe_distribution" {
   aliases = ["frontend.philemonnwanne.me"]
 
   origin {
-    domain_name = var.domain_name
+    # points CloudFront to the corresponding alb
     origin_id   = var.alb_origin_id
+    domain_name = var.backend_domain_name
     custom_origin_config {
       http_port              = local.http_port
       origin_protocol_policy = local.origin_protocol_policy
@@ -38,7 +39,7 @@ resource "aws_cloudfront_distribution" "vacation_vibe_distribution" {
   origin {
     # points CloudFront to the corresponding S3 bucket
     origin_id   = var.s3_origin_id
-    domain_name = aws_s3_bucket.vacation_vibe_cloudfront.bucket_regional_domain_name
+    domain_name = var.s3_domain_name
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.origin_access_identity.cloudfront_access_identity_path
@@ -104,7 +105,6 @@ data "aws_acm_certificate" "issued" {
 }
 
 locals {
-  mime_types             = jsondecode(file("${path.module}/mime.json"))
   s3_origin_id           = var.s3_origin_id
   environment            = var.environment
   http_port              = 80
