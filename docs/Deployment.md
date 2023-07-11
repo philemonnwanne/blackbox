@@ -78,7 +78,30 @@ Now, you can access the tripvibe app by opening your browser and visiting `http:
 
 # Deploy with Docker-Compose 🐬
 
-Create a .env file in the root directory and while in the root directory run
+While in the root directory, create a .env file
+
+```ruby
+# FRONTEND
+VITE_BACKEND_URL="http://127.0.0.1:4000/api"
+
+# BACKEND
+FRONTEND_URL=""
+S3_BUCKET_NAME=""
+AWS_REGION=""
+AWS_ACCESS_KEY_ID=""
+AWS_SECRET_ACCESS_KEY=""
+MONGO_URL=""
+JWT_TOKEN=""
+
+# DATABASE
+MONGO_INITDB_ROOT_USERNAME="enter your username"
+MONGO_INITDB_ROOT_PASSWORD="enter your password"
+
+# APP VARS
+APP_NAME="tripvibe"
+```
+
+Then run
 
 ```sh
 docker-compose up
