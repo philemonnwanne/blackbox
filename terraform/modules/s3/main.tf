@@ -1,3 +1,5 @@
+# ===============-========================
+# BACKEND BUCKET
 # create an S3 bucket for our backend uploads
 resource "aws_s3_bucket" "backend" {
   bucket        = var.bucket_name
@@ -21,6 +23,8 @@ resource "aws_s3_bucket_ownership_controls" "backend" {
     object_ownership = var.object_ownership
   }
 }
+# BACKEND BUCKET
+# ===============-========================
 
 # ===============-========================
 # CLOUDFRONT BUCKET
