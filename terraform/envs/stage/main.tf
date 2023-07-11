@@ -10,6 +10,9 @@ module "alb" {
 
 module "cloudfront" {
   source = "../../modules/cloudfront"
+
+  resources = ["${module.s3.tripvibe_cloudfront_s3_arn}/*"]
+  s3_domain_name = module.s3.tripvibe_cloudfront_s3_domain_name
 }
 
 module "ecs" {
@@ -24,24 +27,24 @@ module "ecs" {
   target_group_arn = module.alb.target_group_arn
 }
 
-module "grafana-cloud" {
-  source = "../../modules/grafana-cloud"
-}
+# module "grafana-cloud" {
+#   source = "../../modules/grafana-cloud"
+# }
 
 # terraform {
 #   backend "s3" {
 #     # Replace this with your bucket name!
-#     bucket    = "vacationvibe-state-dev"
-#     key       = "dev/terraform.tfstate"
-#     region    = "us-east-1"
+#     bucket = "tripvibe-state-dev"
+#     region       = "us-east-1"
+#     key    = "dev/terraform.tfstate"
 #     encrypt   = true
 #   }
 # }
 
 module "route53" {
   source = "../../modules/route53"
-  cloudfront_alias_name = module.cloudfront.vacation_vibe_cloudfront_domain_name
-  cloudfront_alias_zone_id = module.cloudfront.vacation_vibe_cloudfront_hosted_zone_id
+  cloudfront_alias_name = module.cloudfront.tripvibe_cloudfront_domain_name
+  cloudfront_alias_zone_id = module.cloudfront.tripvibe_cloudfront_hosted_zone_id
   alb_alias_name = module.alb.alb_dns
   alb_alias_zone_id = module.alb.alb_zone_id
 }
@@ -60,10 +63,7 @@ module "vpc" {
 #   source = "../../global/statefile"
 # }
 
-module "mogodb" {
-  source = "../../modules/mongodb"
-
-  vpc_id = module.vpc.vpc_id
-  security_group_ids = module.vpc.vpc_security_group_id
-  subnet_ids = [module.vpc.vpc_public_subnet_id, module.vpc.vpc_private_subnet_id]
+module "s3" {
+  source = "../../modules/s3"
+  policy = module.cloudfront.tripvibe_s3_policy
 }

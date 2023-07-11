@@ -11,8 +11,8 @@ module "alb" {
 module "cloudfront" {
   source = "../../modules/cloudfront"
 
-  resources = ["${module.s3.vacation_vibe_cloudfront_s3_arn}/*"]
-  s3_domain_name = module.s3.vacation_vibe_cloudfront_s3_domain_name
+  resources = ["${module.s3.tripvibe_cloudfront_s3_arn}/*"]
+  s3_domain_name = module.s3.tripvibe_cloudfront_s3_domain_name
 }
 
 module "ecs" {
@@ -43,8 +43,8 @@ module "ecs" {
 
 module "route53" {
   source = "../../modules/route53"
-  cloudfront_alias_name = module.cloudfront.vacation_vibe_cloudfront_domain_name
-  cloudfront_alias_zone_id = module.cloudfront.vacation_vibe_cloudfront_hosted_zone_id
+  cloudfront_alias_name = module.cloudfront.tripvibe_cloudfront_domain_name
+  cloudfront_alias_zone_id = module.cloudfront.tripvibe_cloudfront_hosted_zone_id
   alb_alias_name = module.alb.alb_dns
   alb_alias_zone_id = module.alb.alb_zone_id
 }
@@ -65,5 +65,5 @@ module "vpc" {
 
 module "s3" {
   source = "../../modules/s3"
-  policy = module.cloudfront.vacation_vibe_s3_policy
+  policy = module.cloudfront.tripvibe_s3_policy
 }
