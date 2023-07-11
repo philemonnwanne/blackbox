@@ -14,14 +14,14 @@ Create ECR repo for the nodejs image
 
 ```sh
 aws ecr create-repository \
-  --repository-name vacation-vibe-nodejs \
+  --repository-name tripvibe-nodejs \
   --image-tag-mutability MUTABLE
 ```
 
 Set URL
 
 ```sh
-export ECR_NODEJS_URL="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/vacation-vibe-nodejs"
+export ECR_NODEJS_URL="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/tripvibe-nodejs"
 
 echo $ECR_NODEJS_URL
 ```
@@ -101,11 +101,11 @@ Make sure the following are set as environment variables before running the foll
 [secrets-envvar-ssm-paramstore](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/secrets-envvar-ssm-paramstore.html)
 
 ```sh
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/AWS_ACCESS_KEY_ID" --value $AWS_ACCESS_KEY_ID
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY" --value $AWS_SECRET_ACCESS_KEY
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/CONNECTION_URL" --value $CONNECTION_URL
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/MONGO_URL" --value $MONGO_URL
-aws ssm put-parameter --type "SecureString" --name "/vacation-vibe/backend/MONGO_URL" --value $JWT_TOKEN
+aws ssm put-parameter --type "SecureString" --name "/tripvibe/backend/AWS_ACCESS_KEY_ID" --value $AWS_ACCESS_KEY_ID
+aws ssm put-parameter --type "SecureString" --name "/tripvibe/backend/AWS_SECRET_ACCESS_KEY" --value $AWS_SECRET_ACCESS_KEY
+aws ssm put-parameter --type "SecureString" --name "/tripvibe/backend/CONNECTION_URL" --value $CONNECTION_URL
+aws ssm put-parameter --type "SecureString" --name "/tripvibe/backend/MONGO_URL" --value $MONGO_URL
+aws ssm put-parameter --type "SecureString" --name "/tripvibe/backend/MONGO_URL" --value $JWT_TOKEN
 ```
 
 ### Create Task and Exection Roles for Task Defintion
@@ -129,10 +129,10 @@ In the aws directory create a json file `/policies/service-execution-role.json` 
 }
 ```
 
-Create the `vacation-vibeTaskExecutionRole`
+Create the `tripvibeTaskExecutionRole`
 
 ```sh
-aws iam create-role --role-name vacation-vibeTaskExecutionRole --assume-role-policy-document file://aws/policies/service-execution-role.json
+aws iam create-role --role-name tripvibeTaskExecutionRole --assume-role-policy-document file://aws/policies/service-execution-role.json
 ```
 
 Now create another json file `/policies/service-execution-policy.json` and add the following content
@@ -159,7 +159,7 @@ Now create another json file `/policies/service-execution-policy.json` and add t
         "ssm:GetParameter", 
         "ssm:GetParameters"
     ],
-      "Resource": "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend/*"
+      "Resource": "arn:aws:ssm:us-east-1:183066416469:parameter/tripvibe/backend/*"
     }
   ]
 }
@@ -168,16 +168,16 @@ Now create another json file `/policies/service-execution-policy.json` and add t
 Attach the `vacation-taskExecutionPolicy` policy
 
 ```sh
-aws iam put-role-policy --policy-name vacation-taskExecutionPolicy --role-name vacation-vibeTaskExecutionRole --policy-document file://aws/policies/service-execution-policy.json
+aws iam put-role-policy --policy-name vacation-taskExecutionPolicy --role-name tripvibeTaskExecutionRole --policy-document file://aws/policies/service-execution-policy.json
 ```
 
 #### Create TaskRole
 
-Create the `vacation-vibeTaskRole`
+Create the `tripvibeTaskRole`
 
 ```sh
 aws iam create-role \
-    --role-name vacation-vibeTaskRole \
+    --role-name tripvibeTaskRole \
     --assume-role-policy-document "{
   \"Version\":\"2012-10-17\",
   \"Statement\":[{
@@ -195,7 +195,7 @@ Attach the `SSMAccessPolicy` policy
 ```sh
 aws iam put-role-policy \
   --policy-name SSMAccessPolicy \
-  --role-name vacation-vibeTaskRole \
+  --role-name tripvibeTaskRole \
   --policy-document "{
   \"Version\":\"2012-10-17\",
   \"Statement\":[{
@@ -217,7 +217,7 @@ Attach the following policies for access to `CloudWatch` and `X-Ray`
 `CloudWatchFullAccess` policy
 
 ```sh
-aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/CloudWatchFullAccess --role-name vacation-vibeTaskRole
+aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/CloudWatchFullAccess --role-name tripvibeTaskRole
 ```
 
 ### Create a Task Definition for the `Backend`
@@ -229,8 +229,8 @@ Create a new folder called `aws/task-definitions` and place the following file i
 ```json
 {
   "family": "backend",
-  "executionRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeTaskExecutionRole",
-  "taskRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/vacation-vibeTaskRole",
+  "executionRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/tripvibeTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/tripvibeTaskRole",
   "networkMode": "awsvpc",
   "containerDefinitions": [
     {
@@ -250,7 +250,7 @@ Create a new folder called `aws/task-definitions` and place the following file i
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-            "awslogs-group": "vacation-vibe",
+            "awslogs-group": "tripvibe",
             "awslogs-region": "us-east-1",
             "awslogs-stream-prefix": "backend"
         }
@@ -265,11 +265,11 @@ Create a new folder called `aws/task-definitions` and place the following file i
         {"name": "AWS_DEFAULT_REGION", "value": ""}
       ],
       "secrets": [
-        {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/AWS_ACCESS_KEY_ID"},
-        {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/AWS_SECRET_ACCESS_KEY"},
-        {"name": "CONNECTION_URL"       , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/CONNECTION_URL" },
-        {"name": "ROLLBAR_ACCESS_TOKEN" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/ROLLBAR_ACCESS_TOKEN" },
-        {"name": "OTEL_EXPORTER_OTLP_HEADERS" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/vacation-vibe/backend/OTEL_EXPORTER_OTLP_HEADERS" }
+        {"name": "AWS_ACCESS_KEY_ID"    , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/tripvibe/backend/AWS_ACCESS_KEY_ID"},
+        {"name": "AWS_SECRET_ACCESS_KEY", "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/tripvibe/backend/AWS_SECRET_ACCESS_KEY"},
+        {"name": "CONNECTION_URL"       , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/tripvibe/backend/CONNECTION_URL" },
+        {"name": "ROLLBAR_ACCESS_TOKEN" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/tripvibe/backend/ROLLBAR_ACCESS_TOKEN" },
+        {"name": "OTEL_EXPORTER_OTLP_HEADERS" , "valueFrom": "arn:aws:ssm:AWS_REGION:AWS_ACCOUNT_ID:parameter/tripvibe/backend/OTEL_EXPORTER_OTLP_HEADERS" }
         
       ]
     }

@@ -6,7 +6,7 @@ variable "vpc_id" {
 variable "cluster_name" {
   description = "name of the cluster"
   type = string
-  default = "vacation-vibe"
+  default = "tripvibe"
 }
 
 variable "task_name" {
@@ -95,7 +95,7 @@ variable "target_group_arn" {
 variable "secret_manager_arn" {
   description = "the containers name"
   type = string
-  default = "arn:aws:ssm:us-east-1:183066416469:parameter/vacation-vibe/backend"
+  default = "arn:aws:ssm:us-east-1:183066416469:parameter/tripvibe/backend"
 }
 
 variable "aws_region" {
