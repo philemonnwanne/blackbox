@@ -2,14 +2,6 @@
 
 - You must have Terraform installed on your computer
 - You must have an Amazon Web Services (AWS) account
-- You must exported your AWS credentials
-
-```sh
-export AWS_REGION=(your aws region)
-export AWS_ACCESS_KEY_ID=(your access key id)
-export AWS_SECRET_ACCESS_KEY=(your secret access key)
-```
-
 - Create an s3 bucket
   - Click on Object Ownership and set it to `
     Bucket owner preferred`
@@ -115,6 +107,14 @@ docker-compose up
 ```
 
 ## Deploy with Terraform 🐢
+
+You must have exported your AWS credentials
+
+```sh
+export AWS_REGION=(your aws region)
+export AWS_ACCESS_KEY_ID=(your access key id)
+export AWS_SECRET_ACCESS_KEY=(your secret access key)
+```
 
 ### Please note that this example will deploy real resources into your AWS account. We have made every effort to ensure all the resources qualify for the [AWS Free Tier](https://aws.amazon.com/free/), but we are not responsible for any charges you may incur.*
 
