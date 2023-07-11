@@ -1,12 +1,12 @@
 resource "aws_s3_bucket" "vacation_vibe_state" {
-  bucket = tripvibe-state-local.tags["Environment"]
+  bucket              = tripvibe-state-local.tags["Environment"]
   object_lock_enabled = true
   # Prevent accidental deletion of this S3 bucket
   lifecycle {
     prevent_destroy = false
   }
   force_destroy = true
-  tags = local.tags
+  tags          = local.tags
 }
 
 # every update to a file in the bucket creates a new version of that file, a useful fallback mechanism if something goes wrong
@@ -39,8 +39,8 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
 
 locals {
   tags = {
-    Owner = "Capstone-Group02"
-    Track = "Cloud/DevOps"
+    Owner       = "Capstone-Group02"
+    Track       = "Cloud/DevOps"
     Environment = "dev"
   }
 }
