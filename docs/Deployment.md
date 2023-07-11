@@ -1,16 +1,25 @@
 # Pre-requisites
 
-- You must have Terraform installed on your computer.
-- You must have an Amazon Web Services (AWS) account.
-- You must exported your AWS credentials.
+- You must have Terraform installed on your computer
+- You must have an Amazon Web Services (AWS) account
+- You must exported your AWS credentials
+- Create an s3 bucket
+  - Click on Object Ownership and set it to `
+    Bucket owner preferred`
+  - Disable `Block all public access` settings
+  - Then click on `Create bucket`
 
 Please note that this code was written for Terraform 1.x.
 
 ## Deploy App Locally 👨🏾‍💻
 
-To run the tripvibe app locally, follow these steps:
+To run the tripvibe app locally, follow these steps
 
-Clone the repository: `git clone https://github.com/junaidsaleem10144/tripvibe.git`
+Clone the repository
+
+```sh
+git clone https://github.com/philemonnwanne/tripvibe
+```
 
 Navigate to the project directory:
 
