@@ -32,14 +32,30 @@ module "ecs" {
 #   source = "../../modules/grafana-cloud"
 # }
 
-# terraform {
-#   backend "s3" {
-#     # Replace this with your bucket name!
-#     bucket = "tripvibe-state-dev"
-#     region       = "us-east-1"
-#     key    = "dev/terraform.tfstate"
-#     encrypt   = true
-#   }
+terraform {
+  backend "s3" {
+    # Replace this with your bucket name!
+    bucket = "tripvibe-state-dev"
+    region       = "us-east-1"
+    key    = "dev/terraform.tfstate"
+    encrypt   = true
+  }
+}
+
+# remote_state {
+#     backend = "s3"
+#     generate = {
+#         path = "backend.tf"
+#         if_exists = "overwrite_terragrunt"
+#     }
+#     config = {
+#         bucket = "YOUR_S3_BUCKET_NAME" # Amazon S3 bucket required
+
+#         key     = "envs/${local.env_name}/terraform.tfstate"
+#         region  = "us-east-1"
+#         encrypt = true
+#         profile = "YOUR_PROFILE_NAME" # Profile name required
+#     }
 # }
 
 module "route53" {
