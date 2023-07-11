@@ -148,3 +148,5 @@ Clean up when you're done:
 ```sh
 terraform destroy
 ```
+
+## Deploy with Github Actions 🔁
