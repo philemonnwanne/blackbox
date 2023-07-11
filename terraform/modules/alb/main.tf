@@ -1,6 +1,6 @@
 #alb.tf
 resource "aws_lb_target_group" "alb_tg" {
-  name        = "backend-tg"
+  name        = var.group_name
   port        = local.backend_port
   protocol    = local.http_protocol
   target_type = var.target_type
@@ -56,7 +56,7 @@ resource "aws_lb_listener" "alb_https" {
 
 # Find a certificate that is issued
 data "aws_acm_certificate" "issued" {
-  domain   = "philemonnwanne.me"
+  domain   = var.domain
   statuses = ["ISSUED"]
 }
 
@@ -69,8 +69,10 @@ locals {
   http_protocol  = "HTTP"
   https_protocol = "HTTPS"
   all_ips        = ["0.0.0.0/0"]
+
   tags = {
     Owner = "Capstone-Group02"
     Track = "Cloud/DevOps"
+    Environment = "dev"
   }
 }

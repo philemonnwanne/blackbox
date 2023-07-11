@@ -26,10 +26,10 @@ variable "security_groups" {
   type        = list(string)
 }
 
-variable "target_group" {
+variable "group_name" {
   description = "name prefix to assign to backend containers"
   type        = string
-  default     = "backTg"
+  default     = "backend-tg"
 }
 
 variable "target_type" {
