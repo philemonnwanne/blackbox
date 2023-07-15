@@ -1,0 +1,38 @@
+name: Destroy Infrastructure
+
+on:
+  workflow_dispatch:
+
+jobs:
+  infrastructure:
+    env:  
+ # Credentials for deployment to AWS
+      AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        
+    steps:
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v3
+        
+      - name: Setup Terraform with specified version on the runner
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.0
+
+      - name: Terraform init
+        id: init
+        run: |
+          cd terraform/envs/dev
+          terraform init 
+
+      - name: Terraform Destroy
+        id: Destroy
+        run: |
+          cd terraform/envs/dev
+          terraform destroy -auto-approve -input=false
