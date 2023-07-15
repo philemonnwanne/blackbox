@@ -1,5 +1,6 @@
-name: Slack
-on: [pull_request]
+name: Infracost
+on:
+  workflow_call:
 env:
   # If you use private modules you'll need this env variable to use
   # the same ssh-agent socket value across all jobs & steps.
@@ -8,13 +9,14 @@ env:
 jobs:
   slack:
     name: Slack
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       # Required to post comments
       pull-requests: write
     env:
-      TF_ROOT: examples/terraform-project/code
+      TF_ROOT: terraform/envs/dev
 
     steps:
       # If you use private modules, add an environment variable or secret
@@ -74,17 +76,17 @@ jobs:
                                    --pull-request=${{github.event.pull_request.number}} \
                                    --behavior=update
 
-      - name: Generate Slack message
-        id: infracost-slack
-        run: |
-          echo "::set-output name=slack-message::$(infracost output --path=/tmp/infracost.json --format=slack-message --show-skipped)"
-          echo "::set-output name=diffTotalMonthlyCost::$(jq '(.diffTotalMonthlyCost // 0) | tonumber' /tmp/infracost.json)"
+      #- name: Generate Slack message
+      #  id: infracost-slack
+      #  run: |
+      #    echo "::set-output name=slack-message::$(infracost output --path=/tmp/infracost.json --format=slack-message --show-skipped)"
+      #    echo "::set-output name=diffTotalMonthlyCost::$(jq '(.diffTotalMonthlyCost // 0) | tonumber' /tmp/infracost.json)"
 
-      - name: Send cost estimate to Slack
-        uses: slackapi/slack-github-action@v1
-        if: ${{ steps.infracost-slack.outputs.diffTotalMonthlyCost > 0 }} # Only post to Slack if there is a cost diff
-        with:
-          payload: ${{ steps.infracost-slack.outputs.slack-message }}
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      #- name: Send cost estimate to Slack
+      #  uses: slackapi/slack-github-action@v1
+      #  if: ${{ steps.infracost-slack.outputs.diffTotalMonthlyCost > 0 }} # Only post to Slack if there is a cost diff
+      #  with:
+      #    payload: ${{ steps.infracost-slack.outputs.slack-message }}
+      #  env:
+      #    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #    SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
