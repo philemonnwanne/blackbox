@@ -13,5 +13,3 @@ terraform plan -destroy -out=tfplan # create a plan and save it to the local fil
 terraform apply tfplan # apply the plan stored in the file `tfplan`
 
 rm tfplan # delete plan file
-
-echo $(printf "${AKA}Apply complete! Resources: 0 added, 0 changed, 0 destroyed.${NO_COLOR}")
