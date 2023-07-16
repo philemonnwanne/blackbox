@@ -18,19 +18,19 @@ provider "twingate" {
 }
 
 # create the twingate remote network
-resource "twingate_remote_network" "aws_demo_network" {
-  name = "twingate demo remote network"
+resource "twingate_remote_network" "tripvibe_network" {
+  name = "TRIP-VIBE Network"
 }
 
 # create the connector
-resource "twingate_connector" "aws_demo_connector" {
-  remote_network_id = twingate_remote_network.aws_demo_network.id
+resource "twingate_connector" "tripvibe_connector" {
+  remote_network_id = twingate_remote_network.tripvibe_network.id
   name = "tripevibe-connector"
 }
 
 # create the tokens which the remote connector will use to communicate with twingate
-resource "twingate_connector_tokens" "aws_connector_tokens" {
-  connector_id = twingate_connector.aws_demo_connector.id
+resource "twingate_connector_tokens" "tripvibe_connector_tokens" {
+  connector_id = twingate_connector.tripvibe_connector.id
 }
 
 # create a Twingate group
@@ -44,10 +44,10 @@ resource "twingate_group" "tripvibe_group" {
 # }
 
 # create a Twingate resource
-resource "twingate_resource" "aws_demo_resource" {
-  name              = "twingate demo web sever"
+resource "twingate_resource" "tripvibe_resource" {
+  name              = "TRIPEVIBE-SERVER"
   address           = aws_instance.test.private_ip
-  remote_network_id = twingate_remote_network.aws_demo_network.id
+  remote_network_id = twingate_remote_network.tripvibe_network.id
 
   protocols {
     allow_icmp = true
