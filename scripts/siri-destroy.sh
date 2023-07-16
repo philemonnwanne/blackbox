@@ -2,10 +2,9 @@
 #!/usr/bin/env bash
 
 TERRA_DIR="../twingate"
-RED='\e[31m'
-NO_COLOR='\e[0m'
-LABEL="siri-destroy.sh"
-printf "${RED}==${LABEL}${NO_COLOR}\n"
+AKA='\e[31m' NO_COLOR='\e[0m' LABEL="siri-destroy.sh"
+
+printf "💣🔥 ${AKA}${LABEL}${NO_COLOR}\n"
 
 cd ${TERRA_DIR}
 
@@ -15,4 +14,4 @@ terraform apply tfplan # apply the plan stored in the file `tfplan`
 
 rm tfplan # delete plan file
 
-echo $(printf "${RED}Apply complete! Resources: 0 added, 0 changed, 0 destroyed.${NO_COLOR}")
+echo $(printf "${AKA}Apply complete! Resources: 0 added, 0 changed, 0 destroyed.${NO_COLOR}")

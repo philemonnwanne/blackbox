@@ -1,17 +1,13 @@
 # Script compatible with both zsh and bash shells
 #!/usr/bin/env bash
 
-TERRA_DIR="../twingate"
-DIRECTORY=".terraform"
-MAGENTA='\e[35m'
-NO_COLOR='\e[0m'
-LABEL="siri-create.sh"
-printf "${MAGENTA}==${LABEL}${NO_COLOR}\n"
+TERRA_DIR="../twingate" PROVIDERS=".terraform"
+midori='\e[32m' KIIRO='\e[33m' no_color='\e[0m' AO='\e[34m' MAG='\e[35m'
 
 cd ${TERRA_DIR}
 
-if [ -d "$DIRECTORY" ]; then
-  echo $(printf "${MAGENTA} Skipping TERRAFORM INIT, $DIRECTORY directory already exists.${NO_COLOR}")
+if [ -d "$PROVIDERS" ]; then
+  echo $(printf "${KIIRO} Skipping ${midori}TERRAFORM INIT${no_color}, ${AO}REASON${no_color}: existing providers directory.")
 else
   terraform init -input=false # initialize the working directory
 fi
@@ -22,4 +18,4 @@ terraform apply tfplan # apply the plan stored in the file `tfplan`
 
 rm tfplan # delete plan file
 
-echo $(printf "${MAGENTA}Apply complete! Resources: 0 added, 0 changed, 0 destroyed.${NO_COLOR}")
+echo $(printf "${MAG}Apply complete! Resources: 0 added, 0 changed, 0 destroyed.${no_color}") 
