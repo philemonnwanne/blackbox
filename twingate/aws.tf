@@ -61,7 +61,7 @@ data "aws_ami" "twingate" {
 # create a Twingate connector
 resource "aws_instance" "twingate_connector" {
   ami                         = data.aws_ami.twingate.id
-  instance_type               = "t3.micro"
+  instance_type               = "t3.nano"
   associate_public_ip_address = true
   key_name                    = aws_key_pair.ssh_access_key.key_name
   subnet_id                   = aws_subnet.main.id
@@ -108,7 +108,7 @@ resource "aws_key_pair" "ssh_access_key" {
 # create a test VM [private]
 resource "aws_instance" "test" {
   ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.micro"
+  instance_type = "t3.nano"
   key_name      = aws_key_pair.ssh_access_key.key_name
   subnet_id     = aws_subnet.main.id
 
