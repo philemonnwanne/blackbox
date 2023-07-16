@@ -71,14 +71,14 @@ resource "aws_instance" "twingate_connector" {
     mkdir -p /etc/twingate/
     {
       echo TWINGATE_URL="https://${var.tg_network}.twingate.com"
-      echo TWINGATE_ACCESS_TOKEN="${twingate_connector_tokens.aws_connector_tokens.access_token}"
-      echo TWINGATE_REFRESH_TOKEN="${twingate_connector_tokens.aws_connector_tokens.refresh_token}"
+      echo TWINGATE_ACCESS_TOKEN="${twingate_connector_tokens.tripvibe_connector_tokens.access_token}"
+      echo TWINGATE_REFRESH_TOKEN="${twingate_connector_tokens.tripvibe_connector_tokens.refresh_token}"
     } > /etc/twingate/connector.conf
     sudo systemctl enable --now twingate-connector
   EOT
 
   tags = {
-    "Name" = "Twingate Connector"
+    "Name" = "Twingate-Connector"
   }
 }
 
@@ -113,6 +113,9 @@ resource "aws_instance" "test" {
   subnet_id     = aws_subnet.main.id
 
   tags = {
-    "Name" = "Demo VM"
+    "Name" = "Demo-VM"
+    "Environment" = "dev"
+    "Owner" = "phil"
+    "Age" = formatdate("EEEE, DD-MMM-YY hh:mm:ss ZZZ", "2018-01-02T23:12:01Z")
   }
 }
