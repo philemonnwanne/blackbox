@@ -11,7 +11,7 @@ module "alb" {
 module "cloudfront" {
   source = "../../modules/cloudfront"
 
-  resources = ["${module.s3.cloudfront_s3_arn}/*"]
+  resources      = ["${module.s3.cloudfront_s3_arn}/*"]
   s3_domain_name = module.s3.cloudfront_s3_domain_name
 }
 
@@ -25,7 +25,7 @@ module "ecs" {
   vpc_id = module.vpc.vpc_id
   # target_group_arn = "${module.alb.target_group_arns[0]}"
   target_group_arn = module.alb.target_group_arn
-  s3_bucket = module.s3.backend_s3_bucket_name
+  s3_bucket        = module.s3.backend_s3_bucket_name
 }
 
 # module "grafana-cloud" {
@@ -59,11 +59,11 @@ module "ecs" {
 # }
 
 module "route53" {
-  source = "../../modules/route53"
-  cloudfront_alias_name = module.cloudfront.cloudfront_domain_name
+  source                   = "../../modules/route53"
+  cloudfront_alias_name    = module.cloudfront.cloudfront_domain_name
   cloudfront_alias_zone_id = module.cloudfront.cloudfront_hosted_zone_id
-  alb_alias_name = module.alb.alb_dns
-  alb_alias_zone_id = module.alb.alb_zone_id
+  alb_alias_name           = module.alb.alb_dns
+  alb_alias_zone_id        = module.alb.alb_zone_id
 }
 
 module "security" {
@@ -82,5 +82,12 @@ module "vpc" {
 
 module "s3" {
   source = "../../modules/s3"
+
   policy = module.cloudfront.tripvibe_s3_policy
+}
+
+module "twingate" {
+  source = "../../modules/twingate"
+
+  vpc_id = module.vpc.vpc_id
 }
