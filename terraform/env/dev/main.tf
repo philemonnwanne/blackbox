@@ -91,5 +91,6 @@ module "twingate" {
 
   vpc_id = module.vpc.vpc_id
   tg_api_key = ""
-  tg_network = ""
+  tg_network = var.twingate_network
+  subnets = module.vpc.vpc_public_subnet_id
 }

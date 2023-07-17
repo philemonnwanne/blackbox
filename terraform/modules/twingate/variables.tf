@@ -57,6 +57,10 @@ variable "system_req" {
 variable "twingate_network" {
   description = "a single private network in Twingate that can have one or more Connectors and Resources assigned to it"
   type        = string
-  # default     = "https://philemonnwanne.twingate.com"
   default = "philemonnwanne"
+}
+
+variable "subnets" {
+  description = "id of the VPC"
+  type        = list(string)
 }

@@ -16,4 +16,3 @@ Set the follwing as environment variables
 TF_VAR_tg_api_key="token-generated-earlier"
 TF_VAR_tg_network="twingate-network" #e.g https://mycorp.twingate.com
 ```
-

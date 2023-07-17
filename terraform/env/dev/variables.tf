@@ -9,3 +9,9 @@
 #   type        = string
 #   default     = "dev/terraform.tfstate"
 # }
+
+variable "twingate_network" {
+  description = "a single private network in Twingate that can have one or more Connectors and Resources assigned to it"
+  type        = string
+  default = "philemonnwanne"
+}

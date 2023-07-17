@@ -1,50 +1,3 @@
-# query AWS for the latest Ubuntu AMI
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
-}
-
-# create an SSH access key
-resource "aws_key_pair" "ssh_access_key" {
-  key_name   = "~/.ssh/twingate_id_rsa"
-  public_key = file("~/.ssh/twingate_id_rsa.pub")
-}
-
-# create a test VM [private]
-resource "aws_instance" "test" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t3.nano"
-  # associate_public_ip_address = true
-  # key_name  = aws_key_pair.ssh_access_key.key_name
-  subnet_id = module.vpc.public_subnets[0]
-  user_data = <<-EOT
-    #!/bin/bash
-    wget https://github.com/philemonnwanne/blackbox/archive/blackbox.zip
-    unzip blackbox.zip
-    cat ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOckJBQCZfJ/qq9kR0f/Rlyo0fZtUGSaGkVLcV9I5FCt Shortcuts on phils-mb >> ~/.ssh/authorized_keys
-  EOT
-
-  tags = {
-    "Name"        = "Demo-VM"
-    "Environment" = "dev"
-    "Owner"       = "phil"
-    "Age"         = formatdate("EEEE, DD-MMM-YY hh:mm:ss ZZZ", "2018-01-02T23:12:01Z")
-  }
-}
-
-#==================ECS=================# 
-
 # create ecs cluster
 resource "aws_ecs_cluster" "twingate" {
   name = var.cluster_name
@@ -114,7 +67,7 @@ resource "aws_ecs_service" "twingate" {
   network_configuration {
     assign_public_ip = true
     security_groups  = [aws_security_group.twingate_connector.id]
-    subnets          = module.vpc.public_subnets[*]
+    subnets          = var.subnets
   }
 }
 
