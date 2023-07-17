@@ -46,76 +46,106 @@ resource "aws_route_table_association" "a" {
   route_table_id = aws_route_table.example.id
 }
 
+# create a security for the connector
+resource "aws_security_group" "twingate_connector" {
+  name        = "connector-sg"
+  description = "allow the Twingate connector outbound internet access"
+  vpc_id      = module.vpc.vpc_id
+
+  egress {
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port        = 30000
+    to_port          = 31000
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "udp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    description = "allows option for peer-to-peer connectivity for optimal performance"
+  }
+  tags = local.tags
+}
+
 # query AWS for the latest Twingate AMI
-# data "aws_ami" "twingate" {
-#   most_recent = true
+data "aws_ami" "twingate" {
+  most_recent = true
 
-#   filter {
-#     name   = "name"
-#     values = ["twingate/images/hvm-ssd/twingate-amd64-*"]
-#   }
+  filter {
+    name   = "name"
+    values = ["twingate/images/hvm-ssd/twingate-amd64-*"]
+  }
 
-#   owners = ["617935088040"] # Twingate
-# }
+  owners = ["617935088040"] # Twingate
+}
 
-# # create a Twingate connector
-# resource "aws_instance" "twingate_connector" {
-#   ami                         = data.aws_ami.twingate.id
-#   instance_type               = "t3.nano"
-#   associate_public_ip_address = true
-#   key_name                    = aws_key_pair.ssh_access_key.key_name
-#   subnet_id                   = aws_subnet.main.id
-#   user_data                   = <<-EOT
-#     #!/bin/bash
-#     set -e
-#     mkdir -p /etc/twingate/
-#     {
-#       echo TWINGATE_URL="https://${var.tg_network}.twingate.com"
-#       echo TWINGATE_ACCESS_TOKEN="${twingate_connector_tokens.tripvibe_connector_tokens.access_token}"
-#       echo TWINGATE_REFRESH_TOKEN="${twingate_connector_tokens.tripvibe_connector_tokens.refresh_token}"
-#     } > /etc/twingate/connector.conf
-#     sudo systemctl enable --now twingate-connector
-#   EOT
+# create a Twingate connector
+resource "aws_instance" "twingate_connector" {
+  ami                         = data.aws_ami.twingate.id
+  instance_type               = "t3.nano"
+  associate_public_ip_address = true
+  key_name                    = aws_key_pair.ssh_access_key.key_name
+  subnet_id                   = aws_subnet.main.id
+  user_data                   = <<-EOT
+    #!/bin/bash
+    set -e
+    mkdir -p /etc/twingate/
+    {
+      echo TWINGATE_URL="https://${var.tg_network}.twingate.com"
+      echo TWINGATE_ACCESS_TOKEN="${twingate_connector_tokens.tripvibe_connector_tokens.access_token}"
+      echo TWINGATE_REFRESH_TOKEN="${twingate_connector_tokens.tripvibe_connector_tokens.refresh_token}"
+    } > /etc/twingate/connector.conf
+    sudo systemctl enable --now twingate-connector
+  EOT
 
-#   tags = {
-#     "Name" = "Twingate-Connector"
-#   }
-# }
+  tags = {
+    "Name" = "Twingate-Connector"
+  }
+}
 
-# # query AWS for the latest Ubunutu AMI
-# data "aws_ami" "ubuntu" {
-#   most_recent = true
+# query AWS for the latest Ubunutu AMI
+data "aws_ami" "ubuntu" {
+  most_recent = true
 
-#   filter {
-#     name   = "name"
-#     values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-#   }
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
 
-#   filter {
-#     name   = "virtualization-type"
-#     values = ["hvm"]
-#   }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
 
-#   owners = ["099720109477"] # Canonical
-# }
+  owners = ["099720109477"] # Canonical
+}
 
-# # create an SSH access key
-# resource "aws_key_pair" "ssh_access_key" {
-#   key_name   = "~/.ssh/twingate_id_rsa"
-#   public_key = file("~/.ssh/twingate_id_rsa.pub")
-# }
+# create an SSH access key
+resource "aws_key_pair" "ssh_access_key" {
+  key_name   = "~/.ssh/twingate_id_rsa"
+  public_key = file("~/.ssh/twingate_id_rsa.pub")
+}
 
-# # create a test VM [private]
-# resource "aws_instance" "test" {
-#   ami           = data.aws_ami.ubuntu.id
-#   instance_type = "t3.nano"
-#   key_name      = aws_key_pair.ssh_access_key.key_name
-#   subnet_id     = aws_subnet.main.id
+# create a test VM [private]
+resource "aws_instance" "test" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.nano"
+  key_name      = aws_key_pair.ssh_access_key.key_name
+  subnet_id     = aws_subnet.main.id
 
-#   tags = {
-#     "Name" = "Demo-VM"
-#     "Environment" = "dev"
-#     "Owner" = "phil"
-#     "Age" = formatdate("EEEE, DD-MMM-YY hh:mm:ss ZZZ", "2018-01-02T23:12:01Z")
-#   }
-# }
+  tags = {
+    "Name" = "Demo-VM"
+    "Environment" = "dev"
+    "Owner" = "phil"
+    "Age" = formatdate("EEEE, DD-MMM-YY hh:mm:ss ZZZ", "2018-01-02T23:12:01Z")
+  }
+}
