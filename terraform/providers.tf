@@ -20,10 +20,6 @@ terraform {
       source  = "hashicorp/local"
       version = ">= 1.0"
     }
-    twingate = {
-      source  = "Twingate/twingate"
-      version = "1.1.3-rc3"
-    }
   }
   required_version = ">= 1.1.0"
 }
