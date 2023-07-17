@@ -1,16 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      # version = "~> .0"
-    }
-    twingate = {
-      source  = "Twingate/twingate"
-      version = "1.1.3-rc3"
-    }
-  }
-}
-
 # configure Twingate Provider
 provider "twingate" {
   api_token = var.tg_api_key

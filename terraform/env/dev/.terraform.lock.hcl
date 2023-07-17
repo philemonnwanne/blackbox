@@ -23,3 +23,25 @@ provider "registry.terraform.io/hashicorp/aws" {
     "zh:f3de076fa3402768d27af0187c6a677777b47691d1f0f84c9b259ff66e65953e",
   ]
 }
+
+provider "registry.terraform.io/twingate/twingate" {
+  version     = "1.1.3-rc3"
+  constraints = "1.1.3-rc3"
+  hashes = [
+    "h1:IY+SlsMC43tChKNqtNvahXDNeayHTBlu97TAiSzNa64=",
+    "zh:1c25c28a6e1d30e221e0014d02844cc535877ed776c707dfa8ba318f24e75264",
+    "zh:59f1eae84f82928bb01f9eecea965fc820d2d97b5bd1465191f3806d0c9e1181",
+    "zh:78725e863a89cb00107c8a470a701604cf4dbfc57657d552b53bf1d148fbd0f3",
+    "zh:7fbe54b573c9489e9b002b65d5f9cb5d7676b8a78f449ef4f9844a3a2e7ac31b",
+    "zh:88e9a14cc55f73568843ba388abf0e542b52099be4cc62aa45a39fb7bf8531fc",
+    "zh:9e8f4223d8520a60ea966e79ceb3ce3c93fcc504c6f551d62bf7f8c56f6c31a9",
+    "zh:b14df52a0d76d5127765c93d14c77047700a86b1f2f43a2fbeb422ed5f67be8e",
+    "zh:b3b112be640d07cbcf9b353f71489e6aa71bbdc8fae54937398f836255755547",
+    "zh:b4bffe0c819eb2bd5d9442271523f4a840467c1f3e82b3c4e52fb939d30e7e0f",
+    "zh:c48e354912af211edce2fe74e218cb102db6e30c3dcaeb07aade6c020a4491a0",
+    "zh:dff582cd1a45b34f28b11fdeb9757f9f531c3ec00f281542bbce93d824fb591f",
+    "zh:e790eb2d51264b0c73c9e5422d7d9dfca59b69c078a92e53eb74f145097868a0",
+    "zh:f504e1e31b5fc43b13cae77cd27efc12d8c88339de8210aec8802dfa9e649c62",
+    "zh:fa0bee3a73f285730a082dab0a65da979511b662069f4661960d09e462434c39",
+  ]
+}

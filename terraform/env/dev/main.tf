@@ -90,4 +90,6 @@ module "twingate" {
   source = "../../modules/twingate"
 
   vpc_id = module.vpc.vpc_id
+  tg_api_key = ""
+  tg_network = ""
 }
