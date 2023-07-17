@@ -10,8 +10,12 @@
 #   default     = "dev/terraform.tfstate"
 # }
 
-variable "twingate_network" {
+variable "tg_network" {
   description = "a single private network in Twingate that can have one or more Connectors and Resources assigned to it"
   type        = string
-  default = "philemonnwanne"
+}
+
+variable "tg_api_key" {
+  description = "a Twingate API token to programmatically manage your Twingate network"
+  type        = string
 }
