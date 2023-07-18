@@ -1,7 +1,7 @@
 # Script compatible with both zsh and bash shells
 #!/usr/bin/env bash
 
-TERRA_DIR="../twingate" PROVIDERS=".terraform"
+TERRA_DIR="../azure" PROVIDERS=".terraform"
 midori='\e[32m' KIIRO='\e[33m' no_color='\e[0m' AO='\e[34m' MAG='\e[35m'
 
 cd ${TERRA_DIR}
