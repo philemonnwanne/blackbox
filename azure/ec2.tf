@@ -7,14 +7,7 @@ resource "aws_instance" "azure" {
   subnet_id                   = aws_subnet.main.id
   security_groups = [aws_security_group.instance_sg.id]
   user_data_replace_on_change = true
-  user_data                   = <<EOF
-    #!/bin/bash
-    wget https://github.com/philemonnwanne/tripevibe/archive/main.zip
-    apt install unzip
-    unzip main.zip
-    mv tripevibe-main tripevibe
-    echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOckJBQCZfJ/qq9kR0f/Rlyo0fZtUGSaGkVLcV9I5FCt Shortcuts on phils-mb" >> ~/.ssh/authorized_keys
-  EOF
+  user_data                   = file("${path.module}/userdata.sh")
 
   tags = {
     "Name" = "Azure-Instance"
