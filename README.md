@@ -15,4 +15,4 @@ Contributions are welcome [here](docs/CONTRIBUTING.md)
 
 ## Acknowledgements
 
-We would like to express our gratitude to [junaidsaleem10144/VacationVibe](https://github.com/junaidsaleem10144/VacationVibe) for the following resources and libraries that have been instrumental in the development of this project.
+I would like to acknowledge [junaidsaleem10144/VacationVibe](https://github.com/junaidsaleem10144/VacationVibe) for the following resources and libraries that have been instrumental in the development of this project.
