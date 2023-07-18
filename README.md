@@ -2,7 +2,7 @@
 
 # TripeVibe
 
-![Infracost & Terraform Deployment](https://github.com/capgp2/tripevibe/actions/workflows/caller.yml/badge.svg)
+<!-- ![Infracost & Terraform Deployment](https://github.com/capgp2/tripevibe/actions/workflows/caller.yml/badge.svg) -->
 
 ![tripevibe-Homepage](images/tripevibe-homepage.png)
 ![tripevibe-Technical-Diagram](images/tripevibe-technical-diagram.png)
