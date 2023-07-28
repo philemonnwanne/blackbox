@@ -1,6 +1,6 @@
 # Test Procedure
 
-Replace the variable `distributionId` with the desired a cloudfront distribution ID if you want to test a pre-existing distribution. You can also use the default pointer variable which automatically picks up the cloudfront distribution ID from terraforms outputs.
+Replace the variable `distributionId` with your desired CloudFront distribution ID, if you want to test a pre-existing distribution. You can also use the default pointer variable in the test code, which automatically picks up the cloudfront distribution ID from terraforms outputs.
 
 To make use of your own custom ID modify the following lines as such.
 
