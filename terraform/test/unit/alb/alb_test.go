@@ -26,6 +26,8 @@ func TestLoadBalancer(t *testing.T) {
 	// do `terraform init` only on first run
 	folderInfo, err := os.Stat(TerraformHiddenDir)
 
+// func (fun) (f, *this entire function block is for fun.FuN) {
+	
 	// run `Terraform INIT` only on the first run, then `APPLY` on subsequent runs
 	if os.IsNotExist(err) {
 		fmt.Println("Folder does not exist:", folderInfo)
@@ -41,9 +43,10 @@ func TestLoadBalancer(t *testing.T) {
 	}
 
 	fmt.Println("FOLDER WAS FOUND @:", TerraformHiddenDir)
-
+	
 	// run `terraform apply` and fail if there are any errors
 	terraform.Apply(t, terraformOptions)
+// }
 
 	// Run `terraform output` to get the value of an output variable
 	albArn := terraform.Output(t, terraformOptions, "alb_arn")
