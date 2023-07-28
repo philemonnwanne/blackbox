@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestCloudFront(t *testing.T) {
+func TestLoadBalancer(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: ".",
 	})
@@ -72,7 +72,7 @@ func TestCloudFront(t *testing.T) {
 		desired_state := "active"
 		result, err := svc.DescribeLoadBalancers(input)
 		alb_state := *result.LoadBalancers[0].State.Code
-		
+
 		// make sure load balancer is in active state and has no errors
 		if err != nil && alb_state == desired_state {
 			if aerr, ok := err.(awserr.Error); ok {
