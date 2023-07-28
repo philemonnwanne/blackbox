@@ -48,7 +48,6 @@ func TestCloudFront(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	albArn := terraform.Output(t, terraformOptions, "alb_arn")
 
-
 	// FUNCTION TO CHECK IF LOAD BALANCER IS UP
 	var elbv2 = func() (alb_arn string) {
 		// initialize the session that the SDK uses to load credentials from the shared credentials file
@@ -70,8 +69,12 @@ func TestCloudFront(t *testing.T) {
 			LoadBalancerArns: aws.StringSlice(loadBalancerArn),
 		}
 
+		desired_state := "active"
 		result, err := svc.DescribeLoadBalancers(input)
-		if err != nil {
+		alb_state := *result.LoadBalancers[0].State.Code
+		
+		// make sure load balancer is in active state and has no errors
+		if err != nil && alb_state == desired_state {
 			if aerr, ok := err.(awserr.Error); ok {
 				switch aerr.Code() {
 				case elbv2.ErrCodeLoadBalancerNotFoundException:
