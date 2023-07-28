@@ -89,7 +89,7 @@ func TestCloudFront(t *testing.T) {
 		return *result.LoadBalancers[0].LoadBalancerArn
 	}
 
-	// Verify that our distribution has been enabled
+	// Verify that the load balancer is up
 	actualStatus := elbv2()
 	expectedStatus := albArn
 
