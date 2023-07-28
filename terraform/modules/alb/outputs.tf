@@ -17,3 +17,8 @@ output "target_group_arn" {
 #   description = "The DNS name of the load balancer."
 #   value = "http://${aws_alb.alb.dns_name}"
 # }
+
+output "alb_arn" {
+  description = "The ARN name of the load balancer."
+  value = aws_alb.alb.arn
+}
