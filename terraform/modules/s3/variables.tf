@@ -9,8 +9,3 @@ variable "bucket_name" {
   type        = string
   default     = "static-files"
 }
-
-variable "policy" {
-  description = "s3 bucket policy"
-  type        = string
-}

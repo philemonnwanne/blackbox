@@ -83,7 +83,7 @@ module "vpc" {
 module "s3" {
   source = "../../modules/s3"
 
-  policy = module.cloudfront.tripvibe_s3_policy
+  # policy = module.cloudfront.tripvibe_s3_policy
 }
 
 module "twingate" {

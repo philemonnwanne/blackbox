@@ -104,7 +104,34 @@ data "aws_acm_certificate" "issued" {
   statuses = ["ISSUED"]
 }
 
+# ===============-========================
+# CLOUDFRONT BUCKET
+
+# create an S3 bucket for our static web site artifacts
+resource "aws_s3_bucket" "cloudfront" {
+  bucket = "tripvibe-${local.tags["Environment"]}-cloudfront-bucket"
+  tags   = local.tags
+}
+
+# upload the content of the `build` folder as S3 objects
+resource "aws_s3_object" "bucket_upload" {
+  for_each     = fileset("../../../frontend/dist", "**/*.*")
+  bucket       = aws_s3_bucket.cloudfront.id
+  key          = each.key
+  source       = "../../../frontend/dist/${each.value}"
+  etag         = filemd5("../../../frontend/dist/${each.value}")
+  content_type = lookup(local.mime_types, regex("\\.[^.]+$", each.value), null)
+}
+
+resource "aws_s3_bucket_policy" "tripvibe_s3_bucket_policy" {
+  bucket = aws_s3_bucket.cloudfront.id
+  policy = data.aws_iam_policy_document.tripvibe_s3_policy.json
+}
+# CLOUDFRONT BUCKET
+# ===============-========================
+
 locals {
+  mime_types = jsondecode(file("${path.module}/mime.json"))
   s3_origin_id           = var.s3_origin_id
   environment            = var.environment
   http_port              = 80
