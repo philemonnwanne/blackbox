@@ -15,7 +15,7 @@ output "cluster_task_definition" {
 
 output "cluster_name" {
   description = "name of the cluster"
-  value = aws_ecs_service.backend.cluster
+  value = aws_ecs_cluster.tripvibe.name
 }
 
 output "cluster_launch_type" {
